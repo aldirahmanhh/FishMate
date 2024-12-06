@@ -14,3 +14,10 @@ FishMate is an advanced application designed to detect various fish diseases, in
 | Efrem Lucyano Syrilus Theodan	| C286B4KY1231 | Cloud Computing |
 | Aldi Rahman Hermawan | A254B4KY0330 | Mobile Development |
 | Ari Satrio Murdoko Andjalmo | A254B4KY0624 | Mobile Development |
+
+## Learning Path Repository
+| Path | Link |
+|------|------|
+| Mobile Development | https://github.com/aldirahmanhh/FishMate/tree/md-branch |
+| Cloud Computing | https://github.com/aldirahmanhh/FishMate/tree/cc-branch |
+| Machine Learning | https://github.com/aldirahmanhh/FishMate/tree/ml-branch |
