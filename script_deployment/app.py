@@ -15,11 +15,10 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 # Create the uploads directory if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-LABEL = ['Viral diseases White tail disease', 'Parasitic diseases', 'Bacterial diseases - Aeromoniasis', 
-         'Bacterial gill disease', 'Fungal diseases Saprolegniasis', 'Bacterial Red disease', 'Healthy Fish']
+LABEL = ['streptococcosis','Fungal diseases Saprolegniasis', 'Healthy Nila Fish']
 
 # Load the model
-model = tf.keras.models.load_model('model\\fish_disease_model.h5')
+model = tf.keras.models.load_model('.\\model\\two_diseases_model_4.h5')
 
 @app.route("/")
 def index():
@@ -38,7 +37,7 @@ def allowed_file(filename):
 # Function to preprocess the image
 def preprocess_image(image_path):
     image = Image.open(image_path).convert('RGB')  # Ensure the image is in RGB format
-    image = image.resize((150, 150))  # Resize to match model input size (e.g., 224x224)
+    image = image.resize((224, 224))  # Resize to match model input size (e.g., 224x224)
     image = np.array(image) / 255.0  # Normalize pixel values to [0, 1]
     image = np.expand_dims(image, axis=0)  # Add batch dimension (1, 224, 224, 3)
     return image
@@ -64,7 +63,7 @@ def upload_and_classify():
             image = preprocess_image(file_path)
 
             # Perform prediction
-            predictions = model.predict(image)
+            predictions = model.predict(image, verbose=0)[0]
             predicted_class = np.argmax(predictions[0])  # Assuming softmax output
             confidence = float(np.max(predictions[0]))
 
@@ -72,9 +71,10 @@ def upload_and_classify():
             predicted_label = LABEL[predicted_class]
 
             # Return the prediction result
-            return jsonify({
+            return print({
                 "message": "File uploaded and classified successfully",
                 "file_path": file_path,
+                "model_output": predictions,
                 "predicted_class": predicted_label,
                 "confidence": confidence
             }), 200
