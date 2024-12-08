@@ -36,7 +36,6 @@
         app:layout_constraintTop_toBottomOf="@id/logo_fishmate"
         app:hintAnimationEnabled="true"
         app:boxBackgroundMode="outline"
-        app:boxBackgroundColor="@color/md_theme_tertiaryContainer"
         app:boxStrokeColor="@color/md_theme_primaryContainer"
         app:boxStrokeWidth="2dp">
 
@@ -49,7 +48,6 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:selectAllOnFocus="true"
-            android:textColor="@color/md_theme_onSurface"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,7 +61,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameLayout"
         app:boxBackgroundMode="outline"
-        app:boxBackgroundColor="@color/md_theme_tertiaryContainer"
         app:boxStrokeColor="@color/md_theme_primaryContainer"
         app:boxStrokeWidth="2dp">
 
@@ -76,8 +73,7 @@
             android:selectAllOnFocus="true"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/md_theme_onSurface"/>
+            android:textSize="16sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Input -->
@@ -90,7 +86,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailLayout"
         app:boxBackgroundMode="outline"
-        app:boxBackgroundColor="@color/md_theme_tertiaryContainer"
         app:boxStrokeColor="@color/md_theme_primaryContainer"
         app:boxStrokeWidth="2dp">
 
@@ -105,8 +100,8 @@
             android:imeActionLabel="Register"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/md_theme_onSurface"/>
+            android:textSize="16sp"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -114,7 +109,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/register"
-        android:textColor="@color/md_theme_onPrimary"
         android:backgroundTint="@color/md_theme_primary"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
