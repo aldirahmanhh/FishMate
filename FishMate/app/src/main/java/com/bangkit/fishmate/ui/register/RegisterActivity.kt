@@ -18,7 +18,7 @@ import retrofit2.Response
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var sharedPrefHelper: SharedPrefHelper // Properti sharedPrefHelper harus diinisialisasi dengan benar
+    private lateinit var sharedPrefHelper: SharedPrefHelper
 
     private val apiService: ApiService by lazy {
         AuthConfig.api
@@ -74,11 +74,13 @@ class RegisterActivity : AppCompatActivity() {
                     // Simpan username dan email setelah register berhasil
                     sharedPrefHelper.saveUsername(registerRequest.username)
                     sharedPrefHelper.saveEmail(registerRequest.email)
+                    binding.loading.visibility = ProgressBar.GONE
 
                     finish()
                 } else {
                     Log.e("RegisterActivity", "Error: ${response.code()}")
                     showToast("Registration Failed")
+                    binding.loading.visibility = ProgressBar.GONE
                 }
             }
 

@@ -1,5 +1,6 @@
 package com.bangkit.fishmate.ui.home
 
+import HomeFishBannerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import androidx.viewpager2.widget.ViewPager2
+import com.bangkit.fishmate.R
 import com.bangkit.fishmate.adapter.NewsAdapter
 import com.bangkit.fishmate.data.ApiConfig
 import com.bangkit.fishmate.data.Response.NewsResponse
@@ -17,6 +20,7 @@ import com.bangkit.fishmate.databinding.FragmentHomeBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class HomeFragment : Fragment() {
 
@@ -44,6 +48,7 @@ class HomeFragment : Fragment() {
 
         // Fetch News
         fetchNews()
+        setupViewPager()
 
         return binding.root
     }
@@ -67,6 +72,36 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
+    fun setupViewPager (){
+        val viewPager: ViewPager2 = binding.vpHomeBanner
+        val dotsIndicator: DotsIndicator = binding.dotsHomeBanner
+
+        val images = listOf(
+            R.drawable.banner_ikan_nila,
+            R.drawable.banner_ikan_lele,
+        )
+
+        val adapter = HomeFishBannerAdapter(this, images)
+        viewPager.adapter = adapter
+
+        dotsIndicator.attachTo(viewPager)
+
+        viewPager.setPageTransformer { page, position ->
+            when {
+                position <= -1 || position >= 1 -> {
+                    page.alpha = 0f
+                }
+                position == 0f -> {
+                    page.alpha = 1f
+                }
+                else -> {
+                    page.alpha = 1 - Math.abs(position)
+                }
+            }
+        }
+    }
+
 
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
