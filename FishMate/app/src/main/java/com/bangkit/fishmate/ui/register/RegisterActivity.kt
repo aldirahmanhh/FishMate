@@ -74,11 +74,13 @@ class RegisterActivity : AppCompatActivity() {
                     // Simpan username dan email setelah register berhasil
                     sharedPrefHelper.saveUsername(registerRequest.username)
                     sharedPrefHelper.saveEmail(registerRequest.email)
+                    binding.loading.visibility = ProgressBar.GONE
 
                     finish()
                 } else {
                     Log.e("RegisterActivity", "Error: ${response.code()}")
                     showToast("Registration Failed")
+                    binding.loading.visibility = ProgressBar.GONE
                 }
             }
 
