@@ -6,100 +6,126 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-
     <ImageView
         android:id="@+id/logo_fishMateHome"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="115dp"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="12dp"
         android:src="@drawable/fishmate_logo"
         app:layout_constraintBottom_toTopOf="@id/tv_userName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
     <TextView
         android:id="@+id/tv_userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Halo, Nama kamu!"
         android:textSize="23sp"
         android:textStyle="bold"
-        android:text="Halo, Nama kamu!"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        app:layout_constraintTop_toBottomOf="@id/logo_fishMateHome"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@id/vp_home_banner"
+        tools:layout_editor_absoluteY="122dp" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_fishRecomendation"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_home_banner"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_userName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@id/tv_userName"/>
+
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dots_home_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        app:dotsColor="@color/md_theme_secondary"
+        app:dotsCornerRadius="4dp"
+        app:dotsSize="10dp"
+        app:dotsSpacing="4dp"
+        app:selectedDotColor="@color/md_theme_primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_fishCxHome"
+        app:layout_constraintTop_toBottomOf="@id/vp_home_banner"/>
+
 
     <Button
         android:id="@+id/button_fishCxHome"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+
+        android:text="FishCX"
         app:layout_constraintEnd_toStartOf="@id/button_historyHome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rv_fishRecomendation" />
+        app:layout_constraintTop_toBottomOf="@id/dots_home_banner" />
 
     <Button
         android:id="@+id/button_historyHome"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="70dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="32dp"
-        app:layout_constraintTop_toBottomOf="@id/rv_fishRecomendation"
+        android:text="History"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_fishCxHome"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/dots_home_banner" />
 
     <TextView
         android:id="@+id/news_TitleHome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="32dp"
-        android:text="Berita Terbaru"
-        android:layout_marginEnd="10dp"
         android:layout_centerInParent="true"
-        app:layout_constraintTop_toBottomOf="@id/button_fishCxHome"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:text="Berita Terbaru"
+        app:layout_constraintEnd_toStartOf="@id/button_historyHome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_historyHome"/>
+        app:layout_constraintTop_toBottomOf="@id/button_fishCxHome" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_newsRecomendation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/news_TitleHome"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/news_TitleHome" />
 
-
-
-
-
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="12dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
