@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.register?.setOnClickListener {
-            binding.loading.visibility = View.VISIBLE
+            // Gk perlu loading sih, cuma pindah page
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
@@ -63,6 +63,7 @@ class LoginActivity : AppCompatActivity() {
         AuthConfig.api.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
+                    binding.loading.visibility = View.GONE
                     val loginResponse = response.body()
                     if (loginResponse != null && loginResponse.token.isNotEmpty()) {
                         sharedPrefHelper.saveToken(loginResponse.token)
@@ -73,9 +74,11 @@ class LoginActivity : AppCompatActivity() {
 
                         navigateToMainActivity()
                     } else {
+                        binding.loading.visibility = View.GONE
                         showToast("Login failed. Token not received.")
                     }
                 } else {
+                    binding.loading.visibility = View.GONE
                     showToast("Login failed. Server error.")
                 }
             }
