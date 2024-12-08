@@ -18,7 +18,7 @@ import retrofit2.Response
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var sharedPrefHelper: SharedPrefHelper // Properti sharedPrefHelper harus diinisialisasi dengan benar
+    private lateinit var sharedPrefHelper: SharedPrefHelper
 
     private val apiService: ApiService by lazy {
         AuthConfig.api
