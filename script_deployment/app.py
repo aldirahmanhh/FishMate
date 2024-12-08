@@ -18,7 +18,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 LABEL = ['streptococcosis','Fungal diseases Saprolegniasis', 'Healthy Nila Fish']
 
 # Load the model
-model = tf.keras.models.load_model('.\\model\\two_diseases_model_4.h5')
+model = tf.keras.models.load_model('https://storage.googleapis.com/testing-caps12/model-ml/two_diseases_model_4.h5')
 
 @app.route("/")
 def index():
@@ -64,17 +64,18 @@ def upload_and_classify():
 
             # Perform prediction
             predictions = model.predict(image, verbose=0)[0]
-            predicted_class = np.argmax(predictions[0])  # Assuming softmax output
+            #predictions = model.predict(image)
+            predicted_class = np.argmax(predictions[0]) # Assuming softmax output
             confidence = float(np.max(predictions[0]))
 
             # Get the label from the LABEL array
             predicted_label = LABEL[predicted_class]
 
             # Return the prediction result
-            return print({
+            return jsonify({
                 "message": "File uploaded and classified successfully",
                 "file_path": file_path,
-                "model_output": predictions,
+                "model_output": predictions.tolist(),
                 "predicted_class": predicted_label,
                 "confidence": confidence
             }), 200
