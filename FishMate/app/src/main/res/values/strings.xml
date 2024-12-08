@@ -24,5 +24,9 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="setting">Setting</string>
     <string name="already_have_an_account_login">Already have an account? Login</string>
-    <string name="notification">Notification</string>
+    <string name="title_notifications">Notification</string>
+    <string name="recommendation">Recommendation</string>
+    <string name="product_title">Product Title</string>
+    <string name="price">Price</string>
+    <string name="shop">Shop</string>
 </resources>
