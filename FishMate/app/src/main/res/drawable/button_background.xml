@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/md_theme_primaryContainer"/> <!-- Ubah dengan warna pilihan Anda -->
-    <corners android:radius="8dp"/>
+    <solid android:color="@color/md_theme_primary" /> <!-- Change to your button color -->
+    <corners android:radius="8dp" /> <!-- Lower the corner radius here -->
+    <padding android:left="12dp" android:right="12dp" android:top="8dp" android:bottom="8dp" />
 </shape>

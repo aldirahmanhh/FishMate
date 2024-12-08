@@ -80,6 +80,7 @@ class HomeFragment : Fragment() {
         val images = listOf(
             R.drawable.banner_ikan_nila,
             R.drawable.banner_ikan_lele,
+            R.drawable.banner_ikan_gurame,
         )
 
         val adapter = HomeFishBannerAdapter(this, images)
