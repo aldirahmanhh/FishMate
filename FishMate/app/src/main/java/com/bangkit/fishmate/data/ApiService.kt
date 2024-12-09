@@ -1,6 +1,8 @@
 package com.bangkit.fishmate.data
 
 import com.bangkit.fishmate.data.Response.ApiResponse
+import com.bangkit.fishmate.data.Response.ChangePasswordRequest
+import com.bangkit.fishmate.data.Response.ChangePasswordResponse
 import com.bangkit.fishmate.data.Response.LoginRequest
 import com.bangkit.fishmate.data.Response.LoginResponse
 import com.bangkit.fishmate.data.Response.NewsResponse
@@ -26,12 +28,16 @@ interface ApiService {
     ): Call<NewsResponse>
 
     //Login
-    @POST("login")
+    @POST("auth/login")
     fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 
     //Register
-    @POST("register")
+    @POST("auth/register")
     fun register(@Body registerRequest: RegisterRequest): Call<RegisterResponse>
+
+    //Change Password
+    @POST("auth/changePassword")
+    fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Call<ChangePasswordResponse>
 
     //Product
     @GET("search-v2")

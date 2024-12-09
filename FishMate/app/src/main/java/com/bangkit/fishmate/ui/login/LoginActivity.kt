@@ -12,6 +12,7 @@ import com.bangkit.fishmate.data.Response.LoginRequest
 import com.bangkit.fishmate.data.Response.LoginResponse
 import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.ActivityLoginBinding
+import com.bangkit.fishmate.ui.changeAuth.ChangePassword
 import com.bangkit.fishmate.ui.register.RegisterActivity
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -27,21 +28,25 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         binding.loading.visibility = View.GONE
+
         sharedPrefHelper = SharedPrefHelper(this)
 
-        // Check if already logged in by checking for saved token
+        // Check if already logged in
         if (sharedPrefHelper.isLoggedIn()) {
             navigateToMainActivity()
         }
 
         binding.register?.setOnClickListener {
-            // Gk perlu loading sih, cuma pindah page
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
+        binding.forgotPassword?.setOnClickListener {
+            startActivity(Intent(this, ChangePassword::class.java))
+        }
+
         binding.login.setOnClickListener {
+            binding.loading.visibility = View.VISIBLE
             val usernameEditText = findViewById<TextInputEditText>(R.id.username)
             val passwordEditText = findViewById<TextInputEditText>(R.id.password)
             val email = usernameEditText.text.toString()
@@ -52,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
                 loginUser(email, password)
             } else {
                 showToast("Please enter email and password")
-                binding.loading.visibility = View.GONE
             }
         }
     }
@@ -62,28 +66,25 @@ class LoginActivity : AppCompatActivity() {
 
         AuthConfig.api.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                binding.loading.visibility = View.GONE
                 if (response.isSuccessful) {
-                    binding.loading.visibility = View.GONE
                     val loginResponse = response.body()
-                    if (loginResponse != null && loginResponse.token.isNotEmpty()) {
-                        sharedPrefHelper.saveToken(loginResponse.token)
-
-                        // Simpan username dan email setelah login berhasil
-                        sharedPrefHelper.saveUsername(email) // Username bisa diganti sesuai API
+                    if (loginResponse != null && !loginResponse.error) {
+                        sharedPrefHelper.saveToken(loginResponse.loginResult.token)
+                        sharedPrefHelper.saveUsername(loginResponse.loginResult.name)
                         sharedPrefHelper.saveEmail(email)
 
                         navigateToMainActivity()
                     } else {
-                        binding.loading.visibility = View.GONE
-                        showToast("Login failed. Token not received.")
+                        showToast(loginResponse?.message ?: "Login failed.")
                     }
                 } else {
-                    binding.loading.visibility = View.GONE
-                    showToast("Login failed. Server error.")
+                    showToast("Server error: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                binding.loading.visibility = View.GONE
                 showToast("Network request failed: ${t.message}")
             }
         })
@@ -94,13 +95,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToMainActivity() {
-        // Navigate to MainActivity if login is successful
         startActivity(Intent(this, MainActivity::class.java))
         finish()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.loading.visibility = View.GONE
     }
 }

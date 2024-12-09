@@ -29,4 +29,8 @@
     <string name="product_title">Product Title</string>
     <string name="price">Price</string>
     <string name="shop">Shop</string>
+    <string name="prompt_old_password">Enter your current password</string>
+    <string name="prompt_new_password">Enter your new password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="lupa_password">Lupa Password?</string>
 </resources>
