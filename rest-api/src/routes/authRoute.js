@@ -1,11 +1,13 @@
 const express = require('express');
 const Auth = require('../controller/Auth');
 
-const router = express.Router();
 
-router.post('/register', Auth.register);
-router.post('/login', Auth.login);
-router.post('/changePassword', Auth.changePassword);
-router.post('/changeUsername', Auth.changeUsername);
+const authRouter = express.Router();
 
-module.exports = router;
+authRouter.post('/register', Auth.register);
+authRouter.post('/login', Auth.login);
+authRouter.post('/changePassword', Auth.changePassword);
+authRouter.post('/changeUsername', Auth.changeUsername);
+
+
+module.exports = authRouter;

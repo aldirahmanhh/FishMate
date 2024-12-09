@@ -1,5 +1,6 @@
 require('dotenv').config();
 const authRoute = require('./routes/authRoute');
+const fishTypeRoute = require('./routes/fishTypeRoute.js');
 const middlewareLogRequest = require('./middleware/logs.js');
 
 
@@ -10,7 +11,8 @@ const app = express();
 app.use(middlewareLogRequest);
 app.use(express.json()); 
 
-app.use('/', authRoute);
+app.use('/auth', authRoute);
+app.use('/fish', fishTypeRoute)
 
 app.use((err, req, res, next) => {
     res.json({
