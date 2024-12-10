@@ -7,13 +7,12 @@ import com.bangkit.fishmate.data.Response.Article
 import com.bangkit.fishmate.databinding.ItemNewsBinding
 import com.bumptech.glide.Glide
 
-
-class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     private var newsList = mutableListOf<Article>()
 
     class NewsViewHolder(private val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(article: Article) {
+        fun bind(article: Article, clickListener: (String) -> Unit) {
             binding.tvTitle.text = article.title
             binding.tvDescription.text = article.description
 
@@ -22,7 +21,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
                 .into(binding.ivImage)
 
             binding.root.setOnClickListener {
-                TODO("Implement news item click action")
+                clickListener(article.url!!)
             }
         }
     }
@@ -33,7 +32,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(newsList[position])
+        holder.bind(newsList[position], clickListener)
     }
 
     override fun getItemCount(): Int {
