@@ -5,6 +5,7 @@ import numpy as np
 import os
 from PIL import Image
 from werkzeug.utils import secure_filename
+import io
 
 app = Flask(__name__)
 
@@ -15,10 +16,10 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 # Create the uploads directory if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-LABEL = ['streptococcosis','Fungal diseases Saprolegniasis', 'Healthy Nila Fish']
+LABEL = ['Normal Nile Fish','Fungal diseases Saprolegniasis', 'Streptococcosis']
 
 # Load the model
-model = tf.keras.models.load_model('https://storage.googleapis.com/testing-caps12/model-ml/two_diseases_model_4.h5')
+model = tf.keras.models.load_model('.\\model\\two_diseases_model_4.h5')
 
 @app.route("/")
 def index():
@@ -36,10 +37,15 @@ def allowed_file(filename):
 
 # Function to preprocess the image
 def preprocess_image(image_path):
-    image = Image.open(image_path).convert('RGB')  # Ensure the image is in RGB format
-    image = image.resize((224, 224))  # Resize to match model input size (e.g., 224x224)
-    image = np.array(image) / 255.0  # Normalize pixel values to [0, 1]
-    image = np.expand_dims(image, axis=0)  # Add batch dimension (1, 224, 224, 3)
+    with open(image_path, 'rb') as file:
+        image_bytes = file.read()
+        pillow_img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+
+    # Transform image same as for training
+    data = np.asarray(pillow_img)
+    data = data/255.0
+    data = np.expand_dims(data, axis=0)  
+    image = tf.image.resize(data, [224, 224])
     return image
 
 @app.route('/upload', methods=['POST'])
@@ -63,11 +69,11 @@ def upload_and_classify():
             image = preprocess_image(file_path)
 
             # Perform prediction
-            predictions = model.predict(image, verbose=0)[0]
+            predictions = model(image)
             #predictions = model.predict(image)
             predicted_class = np.argmax(predictions[0]) # Assuming softmax output
             confidence = float(np.max(predictions[0]))
-
+            predictions_numpy = tf.Variable(predictions).numpy().tolist()
             # Get the label from the LABEL array
             predicted_label = LABEL[predicted_class]
 
@@ -75,7 +81,7 @@ def upload_and_classify():
             return jsonify({
                 "message": "File uploaded and classified successfully",
                 "file_path": file_path,
-                "model_output": predictions.tolist(),
+                "model_output": predictions_numpy,
                 "predicted_class": predicted_label,
                 "confidence": confidence
             }), 200
