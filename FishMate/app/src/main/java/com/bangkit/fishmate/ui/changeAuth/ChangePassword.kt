@@ -39,7 +39,6 @@ class ChangePassword : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Prepare ChangePasswordRequest and call updatePassword
             val request = ChangePasswordRequest(email, currentPassword, newPassword, confirmPassword)
             updatePassword(request)
         }

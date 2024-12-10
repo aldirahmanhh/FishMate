@@ -44,42 +44,33 @@ class HomeFragment : Fragment() {
         val snapHelper: SnapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(binding.rvNewsRecomendation)
 
-        fetchNews()
+        homeViewModel.newsList.observe(viewLifecycleOwner) { news ->
+            newsAdapter.setNews(news)
+        }
+
+        homeViewModel.toastMessage.observe(viewLifecycleOwner) { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        homeViewModel.fetchNews()
         setupViewPager()
 
         return binding.root
     }
 
-    private fun fetchNews() {
-        val call = ApiConfig.api.getNews("ikan indonesia", "bf4374ec295e42a99952261bef02bbb9")
-        call.enqueue(object : Callback<NewsResponse> {
-            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        newsAdapter.setNews(it.articles.take(10)) //Max 5 news
-                    }
-                } else {
-                    showToast("Failed to load news")
-                }
-            }
 
-            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                showToast("Error: ${t.message}")
-            }
-        })
-    }
 
     fun setupViewPager() {
         val viewPager: ViewPager2 = binding.vpHomeBanner
         val dotsIndicator: DotsIndicator = binding.dotsHomeBanner
 
         val imagesWithIds = listOf(
-            Pair(R.drawable.banner_ikan_nila, 1),  // Ikan Nila -> ID: 1
-            Pair(R.drawable.banner_ikan_lele, 2),  // Ikan Lele -> ID: 2
-            Pair(R.drawable.banner_ikan_gurame, 3) // Ikan Gurame -> ID: 3
+            Pair(R.drawable.banner_ikan_nila, 1),
+            Pair(R.drawable.banner_ikan_lele, 2),
+            Pair(R.drawable.banner_ikan_gurame, 3)
         )
 
-        val adapter = HomeFishBannerAdapter(imagesWithIds) // Pass List<Pair<Int, Int>>
+        val adapter = HomeFishBannerAdapter(imagesWithIds)
         viewPager.adapter = adapter
 
         dotsIndicator.attachTo(viewPager)
@@ -100,10 +91,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
-    private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
