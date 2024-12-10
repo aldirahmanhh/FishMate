@@ -117,7 +117,7 @@ const login = async (req, res) => {
             });
         };
 
-        const token = jwt.sign({ userId: user.userId, name: user.username }, 'secretkey', { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.userId, name: user.username }, 'secretkey', { expiresIn: '365d' });
         res.json({
             error: false,
             message: 'Login berhasil',
