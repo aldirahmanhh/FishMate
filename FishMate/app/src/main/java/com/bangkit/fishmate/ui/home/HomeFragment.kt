@@ -14,12 +14,8 @@ import androidx.recyclerview.widget.SnapHelper
 import androidx.viewpager2.widget.ViewPager2
 import com.bangkit.fishmate.R
 import com.bangkit.fishmate.adapter.NewsAdapter
-import com.bangkit.fishmate.data.ApiConfig
-import com.bangkit.fishmate.data.Response.NewsResponse
+import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.FragmentHomeBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class HomeFragment : Fragment() {
@@ -27,15 +23,19 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var newsAdapter: NewsAdapter
+    private lateinit var sharedPrefHelper : SharedPrefHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        sharedPrefHelper = SharedPrefHelper(requireContext())
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.tvUserName.text = "Hello, ${sharedPrefHelper.getUsername()}!"
 
         newsAdapter = NewsAdapter()
         binding.rvNewsRecomendation.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
