@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bangkit.fishmate.MainActivity
 import com.bangkit.fishmate.R
@@ -37,11 +38,11 @@ class LoginActivity : AppCompatActivity() {
             navigateToMainActivity()
         }
 
-        binding.register?.setOnClickListener {
+        binding.register.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        binding.forgotPassword?.setOnClickListener {
+        binding.forgotPassword.setOnClickListener {
             startActivity(Intent(this, ChangePassword::class.java))
         }
 
@@ -59,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 showToast("Please enter email and password")
             }
         }
+
     }
 
     private fun loginUser(email: String, password: String) {

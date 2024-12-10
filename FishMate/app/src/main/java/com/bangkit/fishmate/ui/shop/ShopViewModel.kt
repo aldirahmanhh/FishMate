@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import android.util.Log
 import com.bangkit.fishmate.data.ProductConfig
 import com.bangkit.fishmate.data.Response.Product
+
 class ShopViewModel : ViewModel() {
 
     private val _products = MutableLiveData<List<Product>>()
@@ -47,6 +48,7 @@ class ShopViewModel : ViewModel() {
                         currentPage++
                     }
                 }
+
             } catch (e: Exception) {
                 Log.e("ShopViewModel", "Error fetching products", e)
             } finally {

@@ -48,7 +48,6 @@ class ProfileFragment : Fragment() {
             binding.switchTheme.isChecked = isDarkMode
         }
 
-        // Change theme on switch toggle
         binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
             lifecycleScope.launch {
                 themeManager.saveTheme(isChecked)
@@ -62,7 +61,6 @@ class ProfileFragment : Fragment() {
             sharedPrefHelper?.clear()
             navigateToLogin()
         }
-
     }
 
     private fun navigateToLogin() {

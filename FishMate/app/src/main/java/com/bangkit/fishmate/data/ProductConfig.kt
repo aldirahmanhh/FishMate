@@ -21,7 +21,7 @@ class ProductConfig {
             val request = Request.Builder()
                 .url(url)
                 .get()
-                .addHeader("x-rapidapi-key", "fd3588e7f0msh20c8ec63a0e8874p18da5bjsn455d61a2c83b")
+                .addHeader("x-rapidapi-key", "8b821e2427msh076cac92c60aa48p128387jsneb8444953fbe")
                 .addHeader("x-rapidapi-host", "real-time-product-search.p.rapidapi.com")
                 .build()
 
@@ -29,7 +29,6 @@ class ProductConfig {
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
-                // Parsing JSON ke objek ProductResponse
                 val productResponse = gson.fromJson(responseBody, ProductResponse::class.java)
                 return@withContext productResponse.data.products ?: emptyList() // Return an empty list if null
             } else {

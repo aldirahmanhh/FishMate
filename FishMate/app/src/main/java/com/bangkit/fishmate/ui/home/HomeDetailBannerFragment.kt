@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bangkit.fishmate.R
 import com.bangkit.fishmate.databinding.FragmentHomeDetailBannerBinding
 import com.bumptech.glide.Glide
 
@@ -16,7 +15,6 @@ class HomeDetailBannerFragment : Fragment() {
 
     private var _binding: FragmentHomeDetailBannerBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var viewModel: HomeDetailBannerViewModel
     private var fishId: Int? = null
 
@@ -26,7 +24,7 @@ class HomeDetailBannerFragment : Fragment() {
 
 
         val fishId = arguments?.getInt("fishId", -1)
-        Log.d("HomeDetailBannerFragment", "Received Fish ID: $fishId")
+        Log.d("HomeDetailFragment", "Received Fish ID: $fishId")
         if (fishId != -1) {
             viewModel.fetchFishDetail(fishId)
         } else {
@@ -52,6 +50,11 @@ class HomeDetailBannerFragment : Fragment() {
         }
 
         setupObservers()
+
+        // Set Floating Button
+        binding.fabBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
 
         return binding.root
     }

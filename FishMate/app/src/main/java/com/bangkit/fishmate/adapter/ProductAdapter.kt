@@ -1,15 +1,18 @@
 package com.bangkit.fishmate.adapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.fishmate.data.Response.Product
 import com.bangkit.fishmate.databinding.ItemProductBinding
+import com.bangkit.fishmate.ui.shop.WebViewActivity
 import com.bumptech.glide.Glide
 
 class ProductAdapter(
-    private val productList: List<Product>,
-    private val onItemClick: (String) -> Unit
+    private val context: Context,  // Menambahkan Context untuk Intent
+    private val productList: List<Product>
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -43,7 +46,10 @@ class ProductAdapter(
 
             // Handle product item click
             binding.root.setOnClickListener {
-                onItemClick(product.product_page_url)
+                // Mengirim URL ke WebViewActivity
+                val intent = Intent(context, WebViewActivity::class.java)
+                intent.putExtra("PRODUCT_URL", product.product_page_url)  // Kirim URL produk
+                context.startActivity(intent)
             }
         }
     }
