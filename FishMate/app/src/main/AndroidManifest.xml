@@ -36,6 +36,8 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true" />
+        <activity android:name=".ui.changeAuth.ChangePassword"
+            android:exported="true" />
     </application>
 
 </manifest>

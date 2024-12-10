@@ -1,4 +1,4 @@
-package com.bangkit.fishmate.ui.setting
+package com.bangkit.fishmate.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,15 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import com.bangkit.fishmate.data.SharedPrefHelper
-import com.bangkit.fishmate.databinding.FragmentSettingBinding
+import com.bangkit.fishmate.databinding.FragmentProfileBinding
 import com.bangkit.fishmate.ui.changeAuth.ChangePassword
 import com.bangkit.fishmate.ui.login.LoginActivity
 import com.bangkit.fishmate.ui.theme.ThemeManager
 import kotlinx.coroutines.launch
 
-class SettingFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentSettingBinding? = null
+    private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private var sharedPrefHelper: SharedPrefHelper? = null
     private lateinit var themeManager: ThemeManager
@@ -27,7 +27,7 @@ class SettingFragment : Fragment() {
         inflater : LayoutInflater, container : ViewGroup?,
         savedInstanceState : Bundle?
     ) : View {
-        _binding = FragmentSettingBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         sharedPrefHelper = SharedPrefHelper(requireContext())
         return binding.root
     }
@@ -44,7 +44,6 @@ class SettingFragment : Fragment() {
         }
 
         themeManager = ThemeManager(requireContext())
-        // Observe theme preference
         themeManager.themeMode.asLiveData().observe(viewLifecycleOwner) { isDarkMode ->
             binding.switchTheme.isChecked = isDarkMode
         }
