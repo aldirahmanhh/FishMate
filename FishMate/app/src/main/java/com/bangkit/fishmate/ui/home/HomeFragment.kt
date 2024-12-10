@@ -1,5 +1,6 @@
 package com.bangkit.fishmate.ui.home
 
+import android.content.Intent
 import com.bangkit.fishmate.adapter.HomeFishBannerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.bangkit.fishmate.R
 import com.bangkit.fishmate.adapter.NewsAdapter
 import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.FragmentHomeBinding
+import com.bangkit.fishmate.ui.news.NewsPageActivity
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class HomeFragment : Fragment() {
@@ -37,7 +39,10 @@ class HomeFragment : Fragment() {
 
         binding.tvUserName.text = "Hello, ${sharedPrefHelper.getUsername()}!"
 
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter { url ->
+            openWebView(url)
+        }
+
         binding.rvNewsRecomendation.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvNewsRecomendation.adapter = newsAdapter
 
@@ -95,5 +100,11 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun openWebView(url: String) {
+        val intent = Intent(requireContext(), NewsPageActivity::class.java)
+        intent.putExtra("url", url)
+        startActivity(intent)
     }
 }
