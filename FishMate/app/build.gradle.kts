@@ -40,6 +40,12 @@ android {
     }
 }
 
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+
 dependencies {
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
@@ -58,7 +64,7 @@ dependencies {
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.3")
-
+    kapt("androidx.room:room-compiler:2.5.2")
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
     implementation ("androidx.datastore:datastore-core:1.1.1")
 
