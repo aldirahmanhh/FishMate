@@ -24,7 +24,7 @@
     <ImageView
         android:id="@+id/image_shop"
         android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -54,5 +54,11 @@
             android:layout_marginBottom="16dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <android.webkit.WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

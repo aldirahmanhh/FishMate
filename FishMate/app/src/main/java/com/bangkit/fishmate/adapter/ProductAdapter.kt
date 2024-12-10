@@ -43,7 +43,6 @@ class ProductAdapter(
 
             // Handle product item click
             binding.root.setOnClickListener {
-                // Open the product page URL
                 onItemClick(product.product_page_url)
             }
         }

@@ -19,6 +19,7 @@
             android:contentDescription="@string/image"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/fishmate_logo" />
+
         <!-- Product Title -->
         <TextView
             android:id="@+id/product_title"
@@ -57,7 +58,8 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:numStars="5"
-            android:rating="4.5" />
+            android:rating="4.5"
+            android:isIndicator="true"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

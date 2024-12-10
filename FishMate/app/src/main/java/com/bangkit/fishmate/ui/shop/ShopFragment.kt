@@ -1,11 +1,13 @@
 package com.bangkit.fishmate.ui.shop
 
-import android.content.Intent
-import android.net.Uri
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,22 +23,46 @@ class ShopFragment : Fragment() {
     private val productList = mutableListOf<Product>()
     private var isLoading = false
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentShopBinding.inflate(inflater, container, false)
 
         // RecyclerView setup
         binding.rvFishRecomendation.layoutManager = LinearLayoutManager(context)
         productAdapter = ProductAdapter(productList) { url ->
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
+            // Show WebView and load the URL
+            binding.swipeRefreshLayout.visibility = View.GONE
+            binding.webView.apply {
+                visibility = View.VISIBLE
+                settings.javaScriptEnabled = true
+                webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(view: WebView, requestUrl: String): Boolean {
+                        view.loadUrl(requestUrl)
+                        return true
+                    }
+                }
+                loadUrl(url)
+            }
         }
         binding.rvFishRecomendation.adapter = productAdapter
 
         // SwipeRefresh setup
         binding.swipeRefreshLayout.setOnRefreshListener {
             shopViewModel.fetchProducts(refresh = true) // Refresh data
+        }
+
+        // WebView back navigation
+        binding.webView.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP && binding.webView.canGoBack()) {
+                binding.webView.goBack()
+                true
+            } else {
+                binding.webView.visibility = View.GONE
+                binding.swipeRefreshLayout.visibility = View.VISIBLE
+                false
+            }
         }
 
         // Get ViewModel
