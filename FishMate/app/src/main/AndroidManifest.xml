@@ -16,6 +16,9 @@
         android:theme="@style/Theme.FishMate"
         tools:targetApi="31">
         <activity
+            android:name=".ui.news.NewsPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.result.ResultActivity"
             android:exported="false" />
         <activity

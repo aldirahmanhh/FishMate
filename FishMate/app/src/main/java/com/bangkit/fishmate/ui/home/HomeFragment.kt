@@ -1,6 +1,6 @@
 package com.bangkit.fishmate.ui.home
 
-import HomeFishBannerAdapter
+import com.bangkit.fishmate.adapter.HomeFishBannerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,13 +32,11 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // Setup RecyclerView
         newsAdapter = NewsAdapter()
         binding.rvNewsRecomendation.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvNewsRecomendation.adapter = newsAdapter
@@ -46,7 +44,6 @@ class HomeFragment : Fragment() {
         val snapHelper: SnapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(binding.rvNewsRecomendation)
 
-        // Fetch News
         fetchNews()
         setupViewPager()
 
@@ -59,7 +56,6 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        // Set adapter dengan berita penyakit ikan
                         newsAdapter.setNews(it.articles.take(10)) //Max 5 news
                     }
                 } else {
@@ -73,17 +69,17 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun setupViewPager (){
+    fun setupViewPager() {
         val viewPager: ViewPager2 = binding.vpHomeBanner
         val dotsIndicator: DotsIndicator = binding.dotsHomeBanner
 
-        val images = listOf(
-            R.drawable.banner_ikan_nila,
-            R.drawable.banner_ikan_lele,
-            R.drawable.banner_ikan_gurame,
+        val imagesWithIds = listOf(
+            Pair(R.drawable.banner_ikan_nila, 1),  // Ikan Nila -> ID: 1
+            Pair(R.drawable.banner_ikan_lele, 2),  // Ikan Lele -> ID: 2
+            Pair(R.drawable.banner_ikan_gurame, 3) // Ikan Gurame -> ID: 3
         )
 
-        val adapter = HomeFishBannerAdapter(this, images)
+        val adapter = HomeFishBannerAdapter(imagesWithIds) // Pass List<Pair<Int, Int>>
         viewPager.adapter = adapter
 
         dotsIndicator.attachTo(viewPager)
@@ -102,6 +98,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
 
 
     private fun showToast(message: String) {

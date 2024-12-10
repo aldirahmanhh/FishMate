@@ -1,8 +1,10 @@
 package com.bangkit.fishmate.data
 
 import com.bangkit.fishmate.data.Response.ApiResponse
+import com.bangkit.fishmate.data.Response.BannerData
 import com.bangkit.fishmate.data.Response.ChangePasswordRequest
 import com.bangkit.fishmate.data.Response.ChangePasswordResponse
+import com.bangkit.fishmate.data.Response.FishBannerResponse
 import com.bangkit.fishmate.data.Response.LoginRequest
 import com.bangkit.fishmate.data.Response.LoginResponse
 import com.bangkit.fishmate.data.Response.NewsResponse
@@ -14,6 +16,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -50,4 +53,8 @@ interface ApiService {
         @Query("sort_by") sortBy: String = "BEST_MATCH",
         @Query("product_condition") productCondition: String = "ANY"
     ): Response<ProductResponse>
+
+    @GET("fish/getfish/{id}")
+    fun getFishDetail(@Path("id") id: Int): Call<FishBannerResponse>
+
 }

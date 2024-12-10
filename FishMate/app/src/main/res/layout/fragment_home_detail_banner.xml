@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.home.HomeDetailBannerFragment">
+
+
+    <ImageView
+        android:id="@+id/fishBanner_detail"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="32dp"
+        android:contentDescription="gambar ikan"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="centerCrop"
+        />
+
+    <TextView
+        android:id="@+id/title_fish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:text="Nama Ikan"
+        android:textColor="@color/md_theme_primary"
+        app:layout_constraintTop_toBottomOf="@id/fishBanner_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/desc_fish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:text="Description"
+        android:textColor="@color/md_theme_primary"
+        app:layout_constraintTop_toBottomOf="@id/title_fish"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

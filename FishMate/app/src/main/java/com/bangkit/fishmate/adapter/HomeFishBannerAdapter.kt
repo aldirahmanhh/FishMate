@@ -1,3 +1,8 @@
+package com.bangkit.fishmate.adapter
+
+import android.os.Bundle
+import android.provider.Settings.Global.putInt
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +13,7 @@ import com.bangkit.fishmate.R
 import com.bangkit.fishmate.ui.home.HomeFragment
 
 class HomeFishBannerAdapter(
-    private val context: HomeFragment,
-    private val images: List<Int> // List of local image resource IDs
+    private val imagesWithIds: List<Pair<Int, Int>> // Pair<ImageResId, FishId>
 ) : RecyclerView.Adapter<HomeFishBannerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,13 +27,22 @@ class HomeFishBannerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val imageResId = images[position]
+        val (imageResId, fishId) = imagesWithIds[position]
         holder.imageView.setImageResource(imageResId)
 
         holder.imageView.setOnClickListener { view ->
-            view.findNavController().navigate(R.id.navigation_setting)
+            Log.d("HomeFishBannerAdapter", "Clicked Fish ID: $fishId")
+            val fishId = imagesWithIds[position].second
+
+            val bundle = Bundle().apply {
+                putInt("fishId", fishId)
+            }
+            view.findNavController().navigate(R.id.navigation_detail_fish_banner, bundle)
         }
+
+
     }
 
-    override fun getItemCount(): Int = images.size
+    override fun getItemCount(): Int = imagesWithIds.size
 }
+
