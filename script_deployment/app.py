@@ -6,8 +6,15 @@ import os
 from PIL import Image
 from werkzeug.utils import secure_filename
 import io
+from google.cloud import firestore
 
 app = Flask(__name__)
+
+# path to json credential
+key_file = 'firestore-service-account.json'
+
+# initial firestore credential file
+db = firestore.Client.from_service_account_json(key_file)
 
 # Set the folder to store uploaded files and the allowed file types
 app.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -77,11 +84,22 @@ def upload_and_classify():
             # Get the label from the LABEL array
             predicted_label = LABEL[predicted_class]
 
+            # inital path to connect to firestore
+            diagnosis_ref = db.collection('diagnosis')
+            query = diagnosis_ref.where('label', '==', predicted_label)
+            results = query.stream()
+
+            # take the result and convert to json
+            diagnosis_data = []
+            for doc in results:
+                diagnosis_data.append(doc.to_dict())
+
             # Return the prediction result
             return jsonify({
                 "message": "File uploaded and classified successfully",
                 "file_path": file_path,
                 "model_output": predictions_numpy,
+                "diagnosis": diagnosis_data[0],
                 "predicted_class": predicted_label,
                 "confidence": confidence
             }), 200
