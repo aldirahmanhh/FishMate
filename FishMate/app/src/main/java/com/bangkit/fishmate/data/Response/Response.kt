@@ -27,9 +27,44 @@ data class RegisterRequest(
     val password: String
 )
 
+
+data class RegisterResponse(
+    val error: Boolean,
+    val message: String,
+    val data: RegisterData
+)
+
+data class RegisterData(
+    val username: String
+)
+
 data class LoginRequest(
     val email: String,
     val password: String
+)
+
+data class LoginResponse(
+    val error: Boolean,
+    val message: String,
+    val loginResult: LoginResult
+)
+
+data class LoginResult(
+    val id: String,
+    val name: String,
+    val token: String
+)
+
+data class ChangePasswordResponse(
+    val error: Boolean,
+    val message: String
+)
+
+data class ChangePasswordRequest(
+    val email: String,
+    val password: String,
+    val newPassword: String,
+    val confirmPassword: String
 )
 
 data class ApiResponse(
@@ -38,14 +73,6 @@ data class ApiResponse(
     val data: Any? = null
 )
 
-data class LoginResponse(
-    val message: String,
-    val token: String
-)
-
-data class RegisterResponse(
-    val message: String
-)
 
 data class Product(
     val product_id: String,
