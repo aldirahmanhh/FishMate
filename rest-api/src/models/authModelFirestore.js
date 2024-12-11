@@ -13,7 +13,7 @@ const registerUser = async (body) => {
     const newUser = {
         userId: body.userId,
         username: body.username,
-        email: body.email.toLowerCase(),
+        email: body.email,
         password: body.password,
         createdAt: body.createdAt,
         updatedAt: body.updatedAt
@@ -22,7 +22,7 @@ const registerUser = async (body) => {
 }
 
 const updatePassword = async (email, newPassword, updatedAt) => {
-    const userSnapshot = await db.collection('auth').where('email', '==', email.toLowerCase()).get();
+    const userSnapshot = await db.collection('auth').where('email', '==', email).get();
     if (userSnapshot.empty) {
         throw new Error('User tidak ditemukan');
     };
@@ -36,7 +36,7 @@ const updatePassword = async (email, newPassword, updatedAt) => {
 };
 
 const updateUsername = async (email, newUsername, updatedAt) => {
-    const userSnapshot = await db.collection('auth').where('email', '==', email.toLowerCase()).get();
+    const userSnapshot = await db.collection('auth').where('email', '==', email).get();
     if (userSnapshot.empty) {
         throw new Error('User tidak ditemukan');
     };
@@ -49,9 +49,33 @@ const updateUsername = async (email, newUsername, updatedAt) => {
 
 };
 
+const resetToken = async (email, token, expiresIn) => {
+    const tokenExist = await db.collection('resetToken').doc(email).get();
+    if ( tokenExist.exists && tokenExist.data().expiresIn > Date.now()) {
+        throw new Error('Token reset masih berlaku');
+    }; 
+
+    const resetData = {token, expiresIn};
+    await db.collection('resetToken').doc(email).set(resetData);
+}
+
+const findToken = async (email, token) => {
+    const doc = await db.collection('resetToken').doc(email).get();
+    if (!doc.exists) return null;
+    const data = doc.data();
+    return data.token === token ? data : null;
+}
+
+const deleteToken = async (email) => {
+    await db.collection('resetToken').doc(email).delete();
+}
+
 module.exports = {
     findUserEmail,
     registerUser,
     updatePassword,
-    updateUsername
+    updateUsername,
+    resetToken,
+    findToken,
+    deleteToken
 };

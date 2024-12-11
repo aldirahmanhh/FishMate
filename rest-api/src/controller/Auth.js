@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const joi = require('joi');
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 const registerRule = joi.object({
     username: joi.string().min(3).max(30).required(),
@@ -25,6 +26,17 @@ const changePasswordRule = joi.object({
 const changeUsernameRule = joi.object({
     email: joi.string().email().required(),
     newUsername: joi.string().min(3).max(30).required()
+});
+
+const forgotPasswordRule = joi.object({
+    email: joi.string().email().required()
+});
+
+const resetPasswordRule = joi.object({
+    email: joi.string().email().required(),
+    token: joi.string().required(),
+    newPassword: joi.string().min(6).required(),
+    confirmPassword: joi.string().min(6).required()
 });
 
 const register = async (req, res) => {
@@ -60,7 +72,7 @@ const register = async (req, res) => {
         const createdAt = new Date().toISOString();
         const updatedAt = createdAt;
 
-        await authModel.registerUser({ userId, username, email, password: hashedPassword, createdAt, updatedAt });
+        await authModel.registerUser({ userId, username, email: emailInsensitive, password: hashedPassword, createdAt, updatedAt });
 
         res.status(201).json({
             error: false,
@@ -186,7 +198,7 @@ const changePassword = async (req, res) => {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         const updatedAt = new Date().toISOString();
 
-        await authModel.updatePassword(email, hashedPassword, updatedAt);
+        await authModel.updatePassword(emailInsensitive, hashedPassword, updatedAt);
 
         res.status(201).json({
             error: false,
@@ -227,13 +239,13 @@ const changeUsername = async (req, res) => {
         if (!user) {
             return res.status(400).json({
                 error: true,
-                message: 'Email atau password tidak valid'
+                message: 'Email tidak valid'
             });
         };
 
         const updatedAt = new Date().toISOString();
 
-        await authModel.updateUsername(email, newUsername, updatedAt);
+        await authModel.updateUsername(emailInsensitive, newUsername, updatedAt);
         res.status(201).json({
             error: false,
             message: 'Username berhasil diperbarui',
@@ -250,6 +262,138 @@ const changeUsername = async (req, res) => {
     };
 };
 
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const emailInsensitive = email.toLowerCase();
+
+        const { error } = forgotPasswordRule.validate(req.body);
+        if (error) {
+            return res.status(400).json({
+                message: 'Input tidak valid. Silahkan coba lagi',
+                detail: error.details.map(err => err.message)
+            });
+        };
+
+        const user = await authModel.findUserEmail(emailInsensitive);
+        if (!user) {
+            return res.status(400).json({
+                error: true,
+                message: 'Email tidak valid'
+            });
+        };
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const expiresIn = Date.now() + 3600000;
+
+        await authModel.resetToken(emailInsensitive, token, expiresIn);
+
+        // const resetLink = `http://localhost:4000/resetPassword?token=${token}&email=${emailInsensitive}`;
+        console.log(`Send this link to user's email: ${token}`);
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // gunakan false untuk port 587
+            auth: {
+                user: process.env.EMAIL_SENDER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        const mailOption = {
+            from: process.env.EMAIL_SENDER,
+            to: emailInsensitive,
+            subject: 'Fish Mate Reset Password',
+            text: `Gunakan token berikut untuk reset password: ${token}`
+        };
+
+        transporter.sendMail(mailOption, (error, info) => {
+            if(error) {
+                console.error('Error sending email: ', error);
+                res.status(500).json({
+                    error: true,
+                    message: 'Server Error',
+                    serverMessage: error.message || error
+                });
+            }else{
+                console.log('Email sent' + info.response);
+                res.status(201).json({
+                    error: false,
+                    message: 'Periksa email anda untuk reset password',
+                });
+            };
+        });
+        
+
+    } catch (error) {
+        console.error('Error in forgotPassword:', error); // Log error untuk debugging
+        res.status(500).json({
+            error: true,
+            message: 'Server Error',
+            serverMessage: error.message || error
+        });
+    };
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const { email, token, newPassword, confirmPassword } = req.body;
+        const emailInsensitive = email.toLowerCase();
+
+        const { error } = resetPasswordRule.validate(req.body);
+        if (error) {
+            return res.status(400).json({
+                message: 'Input tidak valid. Silahkan coba lagi',
+                detail: error.details.map(err => err.message)
+            });
+        };
+
+        if (!emailInsensitive || !token || !newPassword || !confirmPassword) {
+            return res.status(400).json({
+                error: true,
+                message: 'Semua input harus terisi'
+            });
+        };
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({
+                error: true,
+                message: 'Password tidak cocok'
+            });
+        };
+
+        const resetData = await authModel.findToken(emailInsensitive, token);
+        if (!resetData || resetData.expiresIn < Date.now()) {
+            return res.status(400).json({
+                error: true,
+                message: 'Token tidak valid atau telah kedaluwarsa'
+            });
+        };
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const updatedAt = new Date().toISOString();
+
+        await authModel.updatePassword(emailInsensitive, hashedPassword, updatedAt);
+        await authModel.deleteToken(emailInsensitive, token);
+
+        res.status(201).json({
+            error: false,
+            message: 'Password berhasil diperbarui'
+        });
+
+    } catch (error) {
+        console.error('Error in resetPassword:', error); // Log error untuk debugging
+        res.status(500).json({
+            error: true,
+            message: 'Server Error',
+            serverMessage: error.message || error
+        });
+    }
+}
+
+
+
 
 
 
@@ -257,5 +401,7 @@ module.exports = {
     register,
     login,
     changePassword,
-    changeUsername
+    changeUsername,
+    forgotPassword,
+    resetPassword
 };
