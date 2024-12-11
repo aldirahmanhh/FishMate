@@ -9,35 +9,32 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bangkit.fishmate.R
 import com.bangkit.fishmate.data.ModelConfig
-import com.bangkit.fishmate.databinding.ActivityResultBinding
-import com.bangkit.fishmate.ViewModelFactory
+import com.bangkit.fishmate.data.Response.DetectionHistory
+import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bumptech.glide.Glide
-import com.github.mikephil.charting.charts.BarChart
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ResultActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityResultBinding
-    private val resultViewModel: ResultViewModel by viewModels()
 
     private lateinit var resultImageView: ImageView
     private lateinit var diagnosisTextView: TextView
     private lateinit var suggestionTextView: TextView
     private lateinit var explanationTextView: TextView
-    private lateinit var barChart: BarChart
-
+    private lateinit var barChart: com.github.mikephil.charting.charts.BarChart
 
     private var imageUri: String? = null
 
-    private val geminiApiKey = "AIzaSyAAGjOeI5M85HL4MEmOI9LeEt6zXw319eo"
+    // ViewModel
+    private val resultViewModel: ResultViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,41 +45,37 @@ class ResultActivity : AppCompatActivity() {
         diagnosisTextView = findViewById(R.id.diagnosisTextView)
         suggestionTextView = findViewById(R.id.suggestionTextView)
         explanationTextView = findViewById(R.id.explanationTextView)
-        barChart = findViewById(R.id.barChart)
-
-        // Pass the barChart to the ViewModel
-        resultViewModel.setBarChart(barChart)
+        barChart = findViewById(R.id.barChart) // Initialize BarChart
 
         imageUri = intent.getStringExtra("image_uri")
-        Log.d("ResultActivity", "Received image URI: $imageUri")  // Log untuk memverifikasi URI
+        Log.d("ResultActivity", "Received image URI: $imageUri")
 
-        // Pastikan tidak null sebelum diproses lebih lanjut
-        imageUri?.let { uri ->
-            Glide.with(this).load(uri).into(resultImageView)
+        // Set up the BarChart
+        resultViewModel.setBarChart(barChart)
 
-            // Convert URI to File and upload
-            val file = File(getRealPathFromURI(Uri.parse(uri)))
-            file.takeIf { it.exists() }?.let {
-                uploadImage(it)
-            } ?: run {
+        // Display image
+        imageUri?.let {
+            Glide.with(this).load(it).into(resultImageView)
+            val file = getFileFromUri(Uri.parse(it))
+            if (file.exists()) {
+                uploadImage(file)
+            } else {
                 Toast.makeText(this, "Invalid image file", Toast.LENGTH_SHORT).show()
             }
         } ?: run {
             Toast.makeText(this, "No image URI received", Toast.LENGTH_SHORT).show()
         }
 
-
+        // Observe suggestion from ViewModel
         resultViewModel.suggestion.observe(this) { suggestion ->
             suggestionTextView.text = suggestion
         }
     }
 
-
     private fun uploadImage(file: File) {
-        val requestBody = RequestBody.create("image/*".toMediaType(), file)
-        val body = MultipartBody.Part.createFormData("file", file.name, requestBody)
+        val requestBody = okhttp3.RequestBody.create("image/*".toMediaType(), file)
+        val body = okhttp3.MultipartBody.Part.createFormData("file", file.name, requestBody)
 
-        // Call API using coroutine
         lifecycleScope.launch {
             try {
                 val response = ModelConfig.apiService.uploadImage(body)
@@ -92,55 +85,55 @@ class ResultActivity : AppCompatActivity() {
                     diagnosisResponse?.let {
                         diagnosisTextView.text = "Diagnosis: ${it.diagnosis.label}"
                         explanationTextView.text = "Explanation: ${it.diagnosis.explanation}"
-                        resultViewModel.getSuggestion(it.diagnosis.label)
+                        suggestionTextView.text = "Suggestion: ${it.diagnosis.suggestion}"
+
+                        // Panggil ViewModel untuk menampilkan chart
                         resultViewModel.displayChart(it.modelOutput)
+
+                        // Menampilkan saran dari model AI
+                        resultViewModel.getSuggestion(it.diagnosis.label)
+
+                        // Save to history
+                        val dateDetected = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                        val detectionHistory = DetectionHistory(
+                            imageUri = file.absolutePath,
+                            diagnosis = it.diagnosis.label,
+                            explanation = it.diagnosis.explanation,
+                            suggestion = it.diagnosis.suggestion,
+                            dateDetected = dateDetected
+                        )
+                        saveToHistory(detectionHistory)
                     }
                 } else {
-                    Log.e("ResultActivity", "Upload failed: ${response.code()}")
                     Toast.makeText(this@ResultActivity, "Failed to upload image", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                Log.e("ResultActivity", "Error uploading image: ${e.message}", e)
                 Toast.makeText(this@ResultActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("ResultActivity", "Error: ${e.message}", e)
             }
         }
-
-
     }
 
 
+    private fun saveToHistory(detectionHistory: DetectionHistory) {
+        val sharedPrefHelper = SharedPrefHelper(this)
 
-    private fun getRealPathFromURI(uri: Uri): String? {
-        // Tentukan proyeksi kolom yang ingin Anda ambil
-        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA)
+        // Get current history or empty list if not found
+        val currentHistory = sharedPrefHelper.getHistory().toMutableList()
+        currentHistory.add(detectionHistory)
 
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            // Cek apakah kolom yang diperlukan ada
-            val columnIndex = it.getColumnIndex(MediaStore.Images.Media.DATA)
-
-            if (columnIndex != -1 && it.moveToFirst()) {
-                return it.getString(columnIndex) // Mengambil path file
-            }
-        }
-
-        // Jika tidak ada path, coba ambil dengan cara lain
-        if (uri.scheme == "content") {
-            val inputStream = contentResolver.openInputStream(uri)
-            inputStream?.use {
-                val tempFile = File.createTempFile("tempImage", ".jpg")
-                tempFile.outputStream().use { fileOut ->
-                    it.copyTo(fileOut)
-                }
-                return tempFile.absolutePath // Kembalikan path sementara
-            }
-        }
-
-        return null
+        // Save updated history list
+        sharedPrefHelper.saveHistory(currentHistory)
     }
 
-
-
-
+    private fun getFileFromUri(uri: Uri): File {
+        val inputStream: InputStream? = contentResolver.openInputStream(uri)
+        val tempFile = File.createTempFile("upload", ".jpg", cacheDir)
+        inputStream?.use { input ->
+            FileOutputStream(tempFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+        return tempFile
+    }
 }
-

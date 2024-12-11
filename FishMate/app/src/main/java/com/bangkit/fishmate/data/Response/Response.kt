@@ -121,3 +121,11 @@ data class Diagnosis(
     val label: String,
     val suggestion: String
 )
+
+data class DetectionHistory(
+    val imageUri: String,
+    val diagnosis: String,
+    val explanation: String,
+    val suggestion: String,
+    val dateDetected: String
+)

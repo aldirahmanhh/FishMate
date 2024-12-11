@@ -10,12 +10,11 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.generationConfig
 import kotlinx.coroutines.launch
 
-class ResultViewModel: ViewModel() {
+class ResultViewModel : ViewModel() {
     private var barChart: BarChart? = null
     private val _suggestion = MutableLiveData<String>()
     val suggestion: LiveData<String> get() = _suggestion
@@ -32,8 +31,6 @@ class ResultViewModel: ViewModel() {
         barChart = chart
     }
 
-
-
     fun displayChart(modelOutput: List<List<Double>>?) {
         if (barChart == null) {
             Log.e("ResultViewModel", "Bar chart is not initialized")
@@ -45,14 +42,14 @@ class ResultViewModel: ViewModel() {
         }
 
         val entries = mutableListOf<BarEntry>()
-        val labels = listOf("Class 1", "Class 2", "Class 3")
+        val labels = listOf("Normal", "Jamur", "Bakteri")
 
-        // Add confidence values to the bar chart
+        // Tambahkan nilai confidence ke dalam BarChart
         modelOutput[0].forEachIndexed { index, value ->
             entries.add(BarEntry(index.toFloat(), value.toFloat()))
         }
 
-        val dataSet = BarDataSet(entries, "Confidence Scores")
+        val dataSet = BarDataSet(entries, "Jenis Penyakit")
         val barData = BarData(dataSet)
 
         barChart?.data = barData
@@ -61,8 +58,6 @@ class ResultViewModel: ViewModel() {
         barChart?.xAxis?.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
         barChart?.invalidate()
     }
-
-
 
 
     fun getSuggestion(diagnosis: String) {
@@ -79,5 +74,4 @@ class ResultViewModel: ViewModel() {
             }
         }
     }
-
 }

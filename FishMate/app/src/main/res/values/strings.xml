@@ -38,4 +38,8 @@
     <string name="diagnosis">Diagnosis</string>
     <string name="explanation">Penjelasan</string>
     <string name="loading_suggestion">Sedang memuatkan saran…</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="history_diagnosis">History Diagnosis</string>
+    <string name="clear_history">Clear History</string>
+    <string name="back">Back</string>
 </resources>

@@ -2,10 +2,14 @@ package com.bangkit.fishmate.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.bangkit.fishmate.data.Response.DetectionHistory
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SharedPrefHelper(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    private val gson = Gson()
 
     // Save data methods
     fun saveToken(token: String) {
@@ -22,6 +26,28 @@ class SharedPrefHelper(context: Context) {
 
     fun saveDarkMode(isDarkMode: Boolean) {
         sharedPreferences.edit().putBoolean("dark_mode", isDarkMode).apply()
+    }
+
+    // Save history
+    fun saveHistory(historyList: List<DetectionHistory>) {
+        val json = gson.toJson(historyList)
+        sharedPreferences.edit().putString("detection_history", json).apply()
+    }
+
+    // Get history
+    fun getHistory(): List<DetectionHistory> {
+        val json = sharedPreferences.getString("detection_history", null)
+        return if (json != null) {
+            val type = object : TypeToken<List<DetectionHistory>>() {}.type
+            gson.fromJson(json, type)
+        } else {
+            emptyList()
+        }
+    }
+
+    // Clear diagnosis history method
+    fun clearHistory() {
+        sharedPreferences.edit().remove("history_list").apply()
     }
 
     // Get data methods
