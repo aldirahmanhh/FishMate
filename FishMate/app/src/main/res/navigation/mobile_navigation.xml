@@ -16,19 +16,11 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.bangkit.fishmate.ui.dashboard.DashboardFragment"
-        android:label="Dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <!-- Fragment Shop -->
-    <fragment
         android:id="@+id/navigation_shop"
         android:name="com.bangkit.fishmate.ui.shop.ShopFragment"
         android:label="Shop"
         tools:layout="@layout/fragment_shop" />
 
-    <!-- Fragment Profile -->
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.bangkit.fishmate.ui.profile.ProfileFragment"

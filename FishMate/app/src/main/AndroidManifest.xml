@@ -2,9 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bangkit.fishmate">
-    <!-- Mengizinkan akses internet -->
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Mengizinkan akses kamera dan internet -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <!-- Izin untuk akses penyimpanan pada Android 9 dan lebih rendah -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Izin untuk akses penyimpanan (harus menggunakan SAF pada Android 10 ke atas) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- Izin untuk mengakses lokasi metadata media -->
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
+    <!-- Izin untuk aplikasi yang membutuhkan akses langsung ke file -->
+    <!-- Perhatikan bahwa ini hanya diperlukan pada versi Android 10 dan lebih rendah, dan akan membutuhkan SAF pada Android 11 ke atas -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,11 +32,24 @@
         android:theme="@style/Theme.FishMate"
         tools:targetApi="31">
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".ui.capture.CaptureActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.shop.WebViewActivity"
-            android:exported="false"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
-            android:launchMode="singleTask"/>
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.news.NewsPageActivity"
             android:exported="true" />
@@ -35,7 +64,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,5 +74,4 @@
             android:name=".ui.changeAuth.ChangePassword"
             android:exported="true" />
     </application>
-
 </manifest>

@@ -9,12 +9,15 @@ android {
     namespace = "com.bangkit.fishmate"
     compileSdk = 35
 
+
     defaultConfig {
         applicationId = "com.bangkit.fishmate"
         minSdk = 21
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("String", "API_KEY", "\"AIzaSyAAGjOeI5M85HL4MEmOI9LeEt6zXw319eo\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,6 +39,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 }
@@ -47,6 +51,8 @@ kapt {
 }
 
 dependencies {
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     implementation (libs.github.glide)
@@ -67,6 +73,8 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.2")
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
     implementation ("androidx.datastore:datastore-core:1.1.1")
+
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 
 
     implementation(libs.androidx.core.ktx)

@@ -17,6 +17,7 @@ import com.bangkit.fishmate.R
 import com.bangkit.fishmate.adapter.NewsAdapter
 import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.FragmentHomeBinding
+import com.bangkit.fishmate.ui.capture.CaptureActivity
 import com.bangkit.fishmate.ui.news.NewsPageActivity
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
@@ -41,6 +42,11 @@ class HomeFragment : Fragment() {
 
         newsAdapter = NewsAdapter { url ->
             openWebView(url)
+        }
+
+        binding.buttonFishCxHome.setOnClickListener {
+            val intent = Intent(requireContext(), CaptureActivity::class.java)
+            startActivity(intent)
         }
 
         binding.rvNewsRecomendation.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

@@ -4,6 +4,7 @@ import com.bangkit.fishmate.data.Response.ApiResponse
 import com.bangkit.fishmate.data.Response.BannerData
 import com.bangkit.fishmate.data.Response.ChangePasswordRequest
 import com.bangkit.fishmate.data.Response.ChangePasswordResponse
+import com.bangkit.fishmate.data.Response.DiagnosisResponse
 import com.bangkit.fishmate.data.Response.FishBannerResponse
 import com.bangkit.fishmate.data.Response.LoginRequest
 import com.bangkit.fishmate.data.Response.LoginResponse
@@ -11,11 +12,14 @@ import com.bangkit.fishmate.data.Response.NewsResponse
 import com.bangkit.fishmate.data.Response.ProductResponse
 import com.bangkit.fishmate.data.Response.RegisterRequest
 import com.bangkit.fishmate.data.Response.RegisterResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -41,6 +45,13 @@ interface ApiService {
     //Change Password
     @POST("auth/changePassword")
     fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Call<ChangePasswordResponse>
+
+    //Model ML
+    @Multipart
+    @POST("upload")
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part
+    ): Response<DiagnosisResponse>
 
     //Product
     @GET("search-v2")

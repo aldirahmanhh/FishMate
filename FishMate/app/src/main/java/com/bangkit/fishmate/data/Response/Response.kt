@@ -1,5 +1,7 @@
 package com.bangkit.fishmate.data.Response
 
+import com.google.gson.annotations.SerializedName
+
 data class NewsResponse(
     val status: String,
     val totalResults: Int,
@@ -26,7 +28,6 @@ data class RegisterRequest(
     val email: String,
     val password: String
 )
-
 
 data class RegisterResponse(
     val error: Boolean,
@@ -73,7 +74,6 @@ data class ApiResponse(
     val data: Any? = null
 )
 
-
 data class Product(
     val product_id: String,
     val product_title: String,
@@ -85,16 +85,15 @@ data class Product(
     val offer: ProductOffer
 )
 
-
 data class ProductOffer(
-    val offer_id: String,
-    val offer_page_url: String,
+    val offerId: String,
+    val offerPageUrl: String,
     val price: String,
     val shipping: String,
-    val store_name: String,
-    val store_rating: String,
-    val store_review_count: Int,
-    val store_reviews_page_url: String
+    val storeName: String,
+    val storeRating: String,
+    val storeReviewCount: Int,
+    val storeReviewsPageUrl: String
 )
 
 data class ProductData(
@@ -103,6 +102,22 @@ data class ProductData(
 
 data class ProductResponse(
     val status: String,
-    val request_id: String,
+    val requestId: String,
     val data: ProductData
+)
+
+data class DiagnosisResponse(
+    val confidence: Double,
+    val diagnosis: Diagnosis,
+    val filePath: String,
+    val message: String,
+    @SerializedName("model_output") val modelOutput: List<List<Double>>,
+    val predictedClass: String
+)
+
+data class Diagnosis(
+    val explanation: String,
+    val id: Int,
+    val label: String,
+    val suggestion: String
 )
