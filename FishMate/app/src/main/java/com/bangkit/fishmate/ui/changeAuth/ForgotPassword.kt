@@ -64,7 +64,7 @@ class ForgotPassword : AppCompatActivity() {
         val emailInput = email.text.toString()
 
         if (emailInput.isEmpty()) {
-            email.error = getString(R.string.email_required)
+            email.error = getString(R.string.mail_required)
             return
         }
 

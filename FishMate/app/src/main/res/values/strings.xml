@@ -1,90 +1,40 @@
 <resources>
-    <!-- General App Information -->
     <string name="app_name">FishMate</string>
-
-    <!-- Titles -->
     <string name="title_home">Beranda</string>
     <string name="title_dashboard">Dasbor</string>
-    <string name="title_notifications">Pemberitahuan</string>
-
-    <!-- Labels -->
     <string name="image">Gambar</string>
     <string name="title">Judul</string>
     <string name="description">Keterangan</string>
-    <string name="recommendation">Rekomendasi</string>
-    <string name="result_image">Gambar Hasil</string>
-    <string name="diagnosis">Diagnosis</string>
-    <string name="explanation">Penjelasan</string>
-    <string name="tanggal">Tanggal</string>
-    <string name="profile">Profil</string>
-    <string name="history_diagnosis">History Diagnosis</string>
-    <string name="clear_history">Clear History</string>
-    <string name="back">Back</string>
-
-    <!-- Prompts -->
     <string name="prompt_email">Masukkan email</string>
     <string name="prompt_password">Masukkan kata sandi</string>
-    <string name="prompt_username">Masukkan nama pengguna</string>
-    <string name="prompt_old_password">Masukkan kata sandi saat ini</string>
-    <string name="prompt_new_password">Masukkan kata sandi baru</string>
-    <string name="prompt_confirm_password">Konfirmasi kata sandi</string>
-
-    <!-- Hints -->
-    <string name="hint_email">Masukkan email</string>
-    <string name="hint_password">Masukkan kata sandi</string>
-    <string name="hint_username">Masukkan nama pengguna</string>
-    <string name="hint_old_password">Masukkan kata sandi saat ini</string>
-    <string name="hint_new_password">Masukkan kata sandi baru</string>
-    <string name="hint_confirm_password">Konfirmasi kata sandi</string>
-
-    <!-- Actions -->
     <string name="action_sign_in_short">Masuk</string>
     <string name="register">Daftar</string>
     <string name="login">Masuk</string>
-    <string name="log_out">Keluar</string>
+    <string name="error_empty_email">Email tidak boleh kosong</string>
+    <string name="error_empty_password">Kata sandi tidak boleh kosong</string>
+    <string name="login_success">Login berhasil!</string>
+    <string name="logo_fishmate">Logo FishMate</string>
+    <string name="prompt_username">Masukkan nama pengguna</string>
+    <string name="hello_blank_fragment">Hai fragmen kosong</string>
+    <string name="image_profile">Foto Profil</string>
+    <string name="username">Nama pengguna</string>
+    <string name="email">email@example.com</string>
     <string name="change_password">Ubah Kata Sandi</string>
+    <string name="log_out">Keluar</string>
     <string name="dark_mode">Mode Gelap</string>
     <string name="setting">Pengaturan</string>
     <string name="already_have_an_account_login">Sudah memiliki akun? Masuk</string>
-    <string name="lupa_password">Lupa Kata Sandi?</string>
-    <string name="ubahkan_password">Ubah Kata Sandi</string>
-
-    <!-- Errors and Validation -->
-    <string name="email_required">Email tidak boleh kosong</string>
-    <string name="email_invalid">Email tidak valid</string>
-    <string name="password_required">Kata sandi tidak boleh kosong</string>
-    <string name="password_length_error">Password must be at least 6 characters</string>
-    <string name="password_not_match">Kata sandi tidak cocok</string>
-    <string name="password_too_short">Kata sandi terlalu pendek</string>
-    <string name="password_too_long">Kata sandi terlalu panjang</string>
-    <string name="username_required">Nama pengguna tidak boleh kosong</string>
-    <string name="old_password_required">Kata sandi saat ini tidak boleh kosong</string>
-    <string name="new_password_required">Kata sandi baru tidak boleh kosong</string>
-    <string name="confirm_password_required">Konfirmasi kata sandi tidak boleh kosong</string>
-
-    <!-- Valid Messages -->
-    <string name="valid_email">Email valid</string>
-    <string name="valid_password">Kata sandi valid</string>
-
-    <!-- Success and Status Messages -->
-    <string name="login_success">Login berhasil!</string>
-    <string name="loading_suggestion">Sedang memuatkan saran…</string>
-
-    <!-- Product Information -->
+    <string name="title_notifications">Pemberitahuan</string>
+    <string name="recommendation">Rekomendasi</string>
     <string name="product_title">Judul Produk</string>
     <string name="price">Harga</string>
     <string name="shop">Toko</string>
 
     <!-- Miscellaneous -->
-    <string name="logo_fishmate">Logo FishMate</string>
     <string name="tv_email">Email</string>
     <string name="new_password">New Password</string>
-    <string name="image_profile">Foto Profil</string>
-    <string name="hello_blank_fragment">Hai fragmen kosong</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="password">Password</string>
-    <string name="username">Username</string>
-    <string name="email">Email</string>
 
     <string name="hint_token">Masukkan token</string>
     <string name="token_required">Token tidak boleh kosong</string>
@@ -93,4 +43,35 @@
     <string name="ubah_kata_sandi">Ubah Kata Sandi</string>
     <string name="kirim_token">Kirim Token</string>
 
+    <string name="prompt_old_password">Masukkan kata sandi saat ini</string>
+    <string name="prompt_new_password">Masukkan kata sandi baru</string>
+    <string name="lupa_password">Lupa Kata Sandi?</string>
+    <string name="profile">Profil</string>
+    <string name="result_image">Gambar Hasil</string>
+    <string name="diagnosis">Diagnosis</string>
+    <string name="explanation">Penjelasan</string>
+    <string name="loading_suggestion">Sedang memuatkan saran…</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="history_diagnosis">History Diagnosis</string>
+    <string name="clear_history">Clear History</string>
+    <string name="back">Back</string>
+    <string name="gejala">Gejala</string>
+    <string name="isi_gejala">isi gejala</string>
+    <string name="tindakan">Tindakan</string>
+    <string name="isi_tindakan">isi tindakan</string>
+    <string name="pencegahan">Pencegahan</string>
+    <string name="isi_pencegahan">isi pencegahan</string>
+    <string name="hint_email">Masukkan email</string>
+    <string name="hint_password">Masukkan kata sandi</string>
+    <string name="hint_username">Masukkan nama pengguna</string>
+    <string name="hint_old_password">Masukkan kata sandi saat ini</string>
+    <string name="hint_new_password">Masukkan kata sandi baru</string>
+    <string name="hint_confirm_password">Konfirmasi kata sandi</string>
+    <string name="mail_required">Masukan Email</string>
+    <string name="email_required">Email tidak boleh kosong</string>
+    <string name="email_invalid">Email tidak valid</string>
+    <string name="password_not_match">Kata sandi tidak cocok</string>
+    <string name="password_required">Kata sandi tidak boleh kosong</string>
+    <string name="password_length_error">Password must be at least 6 characters</string>
+    <string name="username_required">Masukan Usernam</string>
 </resources>

@@ -15,9 +15,18 @@ import com.google.ai.client.generativeai.type.generationConfig
 import kotlinx.coroutines.launch
 
 class ResultViewModel : ViewModel() {
+    private val _actionSuggestion = MutableLiveData<String>()
+    val actionSuggestion: LiveData<String> get() = _actionSuggestion
+
+    private val _preventionSuggestion = MutableLiveData<String>()
+    val preventionSuggestion: LiveData<String> get() = _preventionSuggestion
+
+    private val _symptomSuggestion = MutableLiveData<String>()
+    val symptomSuggestion: LiveData<String> get() = _symptomSuggestion
+
     private var barChart: BarChart? = null
-    private val _suggestion = MutableLiveData<String>()
-    val suggestion: LiveData<String> get() = _suggestion
+    private val _suggestions = MutableLiveData<Triple<String, String, String>>()
+    val suggestions: LiveData<Triple<String, String, String>> = _suggestions
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash-latest", // Your AI model name
@@ -59,75 +68,73 @@ class ResultViewModel : ViewModel() {
         barChart?.invalidate()
     }
 
-    fun getSuggestion(diagnosis: String) {
+
+    fun getSuggestionAction(diagnosis: String) {
         val prompt = """
-            Berikan saran untuk penyakit $diagnosis dengan struktur sebagai berikut:
-            1. Tindakan yang segera harus dilakukan: [Jelaskan tindakan yang harus segera dilakukan secara rinci].
-            2. Saran Pencegahan: [Berikan rekomendasi pencegahan agar penyakit ini tidak terjadi lagi].
-            3. Informasi lainnya: [Sertakan informasi tambahan yang relevan dengan penyakit ini].
+           Tindakan yang segera harus dilakukan jika ikan mengalami $diagnosis, buat dalam 1 paragraf
         """.trimIndent()
 
         viewModelScope.launch {
             try {
                 Log.d("ResultViewModel", "Sending prompt to AI: $prompt")
                 val generateContent = generativeModel.generateContent(prompt)
-                var aiSuggestion = generateContent.text ?: "" // Pastikan tidak null
-
-                // Bersihkan format bold
+                var aiSuggestion = generateContent.text ?: ""
+                Log.d("ResultViewModel", "AI Suggestion: $aiSuggestion")
                 aiSuggestion = cleanBoldFormatting(aiSuggestion)
 
-                Log.d("ResultViewModel", "AI Suggestion: $aiSuggestion")
-
-                // Extract categorized suggestions
-                val formattedSuggestion = formatCategorizedSuggestion(aiSuggestion)
-                Log.d("ResultViewModel", "Formatted Suggestion: $formattedSuggestion")
-
-                // Update suggestion LiveData
-                _suggestion.value = formattedSuggestion
+                _actionSuggestion.postValue(aiSuggestion)  // Post the result to LiveData
 
             } catch (e: Exception) {
                 Log.e("ResultViewModel", "Error generating suggestion: ${e.message}", e)
-                _suggestion.value = "Gagal mengambil saran"
             }
         }
     }
 
-    // Fungsi untuk membersihkan format bold
+    fun getSuggestionPrevention(diagnosis: String) {
+        val prompt = """
+          Pencegahan supaya ikan tidak mengalami $diagnosis, buat dalam 1 paragraf
+        """.trimIndent()
+
+        viewModelScope.launch {
+            try {
+                Log.d("ResultViewModel", "Sending prompt to AI: $prompt")
+                val generateContent = generativeModel.generateContent(prompt)
+                var aiSuggestion = generateContent.text ?: ""
+                Log.d("ResultViewModel", "AI Suggestion: $aiSuggestion")
+                aiSuggestion = cleanBoldFormatting(aiSuggestion)
+
+                _preventionSuggestion.postValue(aiSuggestion)  // Post the result to LiveData
+
+            } catch (e: Exception) {
+                Log.e("ResultViewModel", "Error generating suggestion: ${e.message}", e)
+            }
+        }
+    }
+
+    fun getSuggestionSymptom(diagnosis: String) {
+        val prompt = """
+          Berikan ciri-ciri penyakit $diagnosis, buat dalam 1 paragraf
+        """.trimIndent()
+
+        viewModelScope.launch {
+            try {
+                Log.d("ResultViewModel", "Sending prompt to AI: $prompt")
+                val generateContent = generativeModel.generateContent(prompt)
+                var aiSuggestion = generateContent.text ?: ""
+                Log.d("ResultViewModel", "AI Suggestion: $aiSuggestion")
+                aiSuggestion = cleanBoldFormatting(aiSuggestion)
+
+                _symptomSuggestion.postValue(aiSuggestion)  // Post the result to LiveData
+
+            } catch (e: Exception) {
+                Log.e("ResultViewModel", "Error generating suggestion: ${e.message}", e)
+            }
+        }
+    }
+
     private fun cleanBoldFormatting(text: String): String {
         return text.replace(Regex("\\*\\*"), "")
     }
 
-    // Extract categorized suggestions from the AI response
-    private fun formatCategorizedSuggestion(suggestionText: String): String {
-        val tindakanRegex = Regex("1\\. Tindakan yang Segera Harus Dilakukan:(.*?)(?=2\\. Saran Pencegahan:|$)", RegexOption.DOT_MATCHES_ALL)
-        val pencegahanRegex = Regex("2\\. Saran Pencegahan:(.*?)(?=3\\. Informasi Lainnya:|$)", RegexOption.DOT_MATCHES_ALL)
-        val informasiRegex = Regex("3\\. Informasi Lainnya:(.*)", RegexOption.DOT_MATCHES_ALL)
 
-        val tindakan = tindakanRegex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
-        val pencegahan = pencegahanRegex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
-        val informasi = informasiRegex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
-
-        return """
-        1. Tindakan yang segera harus dilakukan:
-        $tindakan
-
-        2. Saran Pencegahan:
-        $pencegahan
-
-        3. Informasi lainnya:
-        $informasi
-    """.trimIndent()
-    }
-
-
-    // Fungsi tambahan untuk memisahkan setiap poin
-    fun extractPoint(suggestionText: String, pointNumber: Int): String {
-        val regex = when (pointNumber) {
-            1 -> Regex("\\*\\*1\\. Tindakan yang Segera Harus Dilakukan:\\*(.*?)\\*\\*2\\. Saran Pencegahan:\\*", RegexOption.DOT_MATCHES_ALL)
-            2 -> Regex("\\*\\*2\\. Saran Pencegahan:\\*(.*?)\\*\\*3\\. Informasi Lainnya:\\*", RegexOption.DOT_MATCHES_ALL)
-            3 -> Regex("\\*\\*3\\. Informasi Lainnya:\\*(.*)", RegexOption.DOT_MATCHES_ALL)
-            else -> return "Tidak valid"
-        }
-        return regex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
-    }
 }

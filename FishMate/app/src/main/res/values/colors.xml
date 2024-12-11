@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="md_theme_primary">#362ABB</color>
+    <color name="md_theme_primary">#4971ED</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_primaryContainer">#5C55E0</color>
     <color name="md_theme_onPrimaryContainer">#FFFFFF</color>
@@ -165,4 +165,7 @@
     <color name="colorOnCustomColor2_highContrast">#FFFFFF</color>
     <color name="colorCustomColor2Container_highContrast">#004B51</color>
     <color name="colorOnCustomColor2Container_highContrast">#FFFFFF</color>
+    <color name="text_color">#FFFFFF</color>
+    <color name="thumbTint">#33D4EE</color>
+    <color name="trackTint">#FFFFFF</color>
 </resources>

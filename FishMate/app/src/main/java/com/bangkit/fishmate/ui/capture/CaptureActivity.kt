@@ -61,6 +61,7 @@ class CaptureActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
+
         galleryButton.setOnClickListener {
             openGallery()
         }

@@ -75,28 +75,28 @@
             app:layout_constraintTop_toBottomOf="@id/vp_home_banner"/>
 
 
-        <Button
+        <ImageButton
             android:id="@+id/button_fishCxHome"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="100dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/button_background"
-            android:text="FishCX"
+            android:scaleType="centerInside"
+            android:background="@drawable/scan"
             app:layout_constraintEnd_toStartOf="@id/button_historyHome"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dots_home_banner" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_historyHome"
             android:layout_width="100dp"
-            android:layout_height="70dp"
+            android:layout_height="100dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="32dp"
             android:text="History"
-            android:background="@drawable/button_background"
+            android:background="@drawable/history"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/button_fishCxHome"
             app:layout_constraintTop_toBottomOf="@id/dots_home_banner" />
