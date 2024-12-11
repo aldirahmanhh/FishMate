@@ -134,7 +134,6 @@ const login = async (req, res) => {
             error: false,
             message: 'Login berhasil',
             loginResult: {
-                id: user.userId,
                 name: user.username,
                 token
             }
@@ -206,6 +205,7 @@ const changePassword = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in changePassword:', error); // Log error untuk debugging
+
         res.status(500).json({
             error: true,
             message: 'Server Error',
@@ -254,6 +254,7 @@ const changeUsername = async (req, res) => {
 
     } catch (error) {
         console.error('Error in changeUsername:', error); // Log error untuk debugging
+        
         res.status(500).json({
             error: true,
             message: 'Server Error',
@@ -280,6 +281,14 @@ const forgotPassword = async (req, res) => {
             return res.status(400).json({
                 error: true,
                 message: 'Email tidak valid'
+            });
+        };
+
+        const tokenExist = await authModel.findToken(emailInsensitive);
+        if (tokenExist && tokenExist.expiresIn > Date.now()) {
+            return res.status(400).json({
+                error: true,
+                message: 'Token reset masih berlaku'
             });
         };
 
