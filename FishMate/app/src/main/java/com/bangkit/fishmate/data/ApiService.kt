@@ -17,6 +17,7 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -44,7 +45,10 @@ interface ApiService {
 
     //Change Password
     @POST("auth/changePassword")
-    fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Call<ChangePasswordResponse>
+    fun changePassword(
+        @Header("Authorization") token: String,
+        @Body request: ChangePasswordRequest
+    ): Call<ChangePasswordResponse>
 
 
 
@@ -68,6 +72,9 @@ interface ApiService {
     ): Response<ProductResponse>
 
     @GET("fish/getfish/{id}")
-    fun getFishDetail(@Path("id") id: Int): Call<FishBannerResponse>
+    fun getFishDetail(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Call<FishBannerResponse>
 
 }

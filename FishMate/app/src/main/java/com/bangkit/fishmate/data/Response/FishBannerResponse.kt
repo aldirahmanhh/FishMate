@@ -8,7 +8,10 @@ data class FishBannerResponse(
 	val data: BannerData? = null,
 
 	@field:SerializedName("success")
-	val success: Boolean? = null
+	val success: Boolean? = null,
+
+	@field:SerializedName("message")
+	val message: String? = null
 )
 
 data class PenyakitItem(

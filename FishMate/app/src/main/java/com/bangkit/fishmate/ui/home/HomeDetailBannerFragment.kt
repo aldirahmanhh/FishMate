@@ -20,18 +20,19 @@ class HomeDetailBannerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeDetailBannerViewModel::class.java)
 
-
-        val fishId = arguments?.getInt("fishId", -1)
+        // Get the fishId passed from the previous fragment
+        fishId = arguments?.getInt("fishId", -1)
         Log.d("HomeDetailFragment", "Received Fish ID: $fishId")
+
         if (fishId != -1) {
+            // Initialize ViewModel using the AndroidViewModel constructor
+            viewModel = ViewModelProvider(this).get(HomeDetailBannerViewModel::class.java)
             viewModel.fetchFishDetail(fishId)
         } else {
             Toast.makeText(requireContext(), "Invalid Fish ID", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,19 +40,9 @@ class HomeDetailBannerFragment : Fragment() {
     ): View {
         _binding = FragmentHomeDetailBannerBinding.inflate(inflater, container, false)
 
-        // Initialize ViewModel
-        viewModel = ViewModelProvider(this).get(HomeDetailBannerViewModel::class.java)
-
-        // Fetch fish details
-        fishId?.let { id ->
-            if (id != -1) {
-                viewModel.fetchFishDetail(id)
-            }
-        }
-
         setupObservers()
 
-        // Set Floating Button
+        // Floating action button click handler
         binding.fabBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -81,7 +72,6 @@ class HomeDetailBannerFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

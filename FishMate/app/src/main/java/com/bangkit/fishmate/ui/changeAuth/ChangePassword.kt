@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bangkit.fishmate.data.AuthConfig
 import com.bangkit.fishmate.data.Response.ChangePasswordRequest
 import com.bangkit.fishmate.data.Response.ChangePasswordResponse
+import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.ActivityChangePasswordBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,27 +46,33 @@ class ChangePassword : AppCompatActivity() {
     }
 
     private fun updatePassword(request: ChangePasswordRequest) {
+        // Show loading indicator
         binding.loading.visibility = View.VISIBLE
 
-        AuthConfig.api.changePassword(request).enqueue(object : Callback<ChangePasswordResponse> {
+        // Get the token from SharedPreferences (or wherever it's stored)
+        val token = "Bearer ${SharedPrefHelper(this).getToken()}" // Assuming you store the token with "Bearer " prefix
+
+        // Call API to update password
+        AuthConfig.api.changePassword(token, request).enqueue(object : Callback<ChangePasswordResponse> {
             override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
-                binding.loading.visibility = View.GONE
+                binding.loading.visibility = View.GONE // Hide loading indicator
+
                 if (response.isSuccessful) {
                     val changePasswordResponse = response.body()
                     if (changePasswordResponse != null && !changePasswordResponse.error) {
-                        showToast(changePasswordResponse.message)
-                        finish()
+                        showToast("Password successfully updated")
+                        finish() // Close the activity after successful password update
                     } else {
-                        showToast("Failed to update password")
+                        showToast(changePasswordResponse?.message ?: "Failed to update password")
                     }
                 } else {
-                    showToast("Server error: ${response.code()}")
+                    showToast("Error: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<ChangePasswordResponse>, t: Throwable) {
-                binding.loading.visibility = View.GONE
-                showToast("Network error: ${t.message}")
+                binding.loading.visibility = View.GONE // Hide loading indicator
+                showToast("Request failed: ${t.message}")
             }
         })
     }
