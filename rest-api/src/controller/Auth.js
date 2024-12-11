@@ -283,8 +283,8 @@ const forgotPassword = async (req, res) => {
             });
         };
 
-        const token = crypto.randomBytes(32).toString('hex');
-        const expiresIn = Date.now() + 3600000;
+        const token = crypto.randomBytes(3).toString('hex');
+        const expiresIn = Date.now() + 20 * 60 * 1000;
 
         await authModel.resetToken(emailInsensitive, token, expiresIn);
 
@@ -309,14 +309,14 @@ const forgotPassword = async (req, res) => {
         };
 
         transporter.sendMail(mailOption, (error, info) => {
-            if(error) {
+            if (error) {
                 console.error('Error sending email: ', error);
                 res.status(500).json({
                     error: true,
                     message: 'Server Error',
                     serverMessage: error.message || error
                 });
-            }else{
+            } else {
                 console.log('Email sent' + info.response);
                 res.status(201).json({
                     error: false,
@@ -324,7 +324,6 @@ const forgotPassword = async (req, res) => {
                 });
             };
         });
-        
 
     } catch (error) {
         console.error('Error in forgotPassword:', error); // Log error untuk debugging
@@ -391,11 +390,6 @@ const resetPassword = async (req, res) => {
         });
     }
 }
-
-
-
-
-
 
 module.exports = {
     register,
