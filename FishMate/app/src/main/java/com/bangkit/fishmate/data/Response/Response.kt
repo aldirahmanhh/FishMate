@@ -68,6 +68,15 @@ data class ChangePasswordRequest(
     val confirmPassword: String
 )
 
+data class ForgotPasswordRequest(
+    val email: String
+)
+
+data class ForgotPasswordResponse(
+    val error: Boolean,
+    val message: String
+)
+
 data class ApiResponse(
     val status: String,
     val message: String,

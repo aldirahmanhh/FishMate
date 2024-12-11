@@ -2,9 +2,10 @@ package com.bangkit.fishmate.ui.result
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -36,11 +37,14 @@ class ResultActivity : AppCompatActivity() {
     // ViewModel
     private val resultViewModel: ResultViewModel by viewModels()
 
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
 
         // Initialize views
+        progressBar = findViewById(R.id.Resloading)
         resultImageView = findViewById(R.id.resultImageView)
         diagnosisTextView = findViewById(R.id.diagnosisTextView)
         suggestionTextView = findViewById(R.id.suggestionTextView)
@@ -58,6 +62,7 @@ class ResultActivity : AppCompatActivity() {
             Glide.with(this).load(it).into(resultImageView)
             val file = getFileFromUri(Uri.parse(it))
             if (file.exists()) {
+                progressBar.visibility = View.VISIBLE
                 uploadImage(file)
             } else {
                 Toast.makeText(this, "Invalid image file", Toast.LENGTH_SHORT).show()
@@ -68,8 +73,14 @@ class ResultActivity : AppCompatActivity() {
 
         // Observe suggestion from ViewModel
         resultViewModel.suggestion.observe(this) { suggestion ->
-            suggestionTextView.text = suggestion
+            progressBar.visibility = View.GONE
+            if (suggestion.isNotEmpty()) {
+                suggestionTextView.text = suggestion
+            } else {
+                suggestionTextView.text = "Tidak ada saran yang tersedia untuk diagnosis ini."
+            }
         }
+
     }
 
     private fun uploadImage(file: File) {
@@ -83,23 +94,28 @@ class ResultActivity : AppCompatActivity() {
                     val diagnosisResponse = response.body()
                     Log.d("ResultActivity", "Diagnosis Response: $diagnosisResponse")
                     diagnosisResponse?.let {
-                        diagnosisTextView.text = "Diagnosis: ${it.diagnosis.label}"
-                        explanationTextView.text = "Explanation: ${it.diagnosis.explanation}"
-                        suggestionTextView.text = "Suggestion: ${it.diagnosis.suggestion}"
+                        val diagnosisText = it.diagnosis.label
+                        val explanationText = it.diagnosis.explanation
+                        val suggestionText = it.diagnosis.suggestion
+
+                        // Display the diagnosis and explanation text
+                        diagnosisTextView.text = "Diagnosis: $diagnosisText"
+                        explanationTextView.text = "Explanation: $explanationText"
+                        suggestionTextView.text = "Suggestion: $suggestionText"
 
                         // Panggil ViewModel untuk menampilkan chart
                         resultViewModel.displayChart(it.modelOutput)
 
                         // Menampilkan saran dari model AI
-                        resultViewModel.getSuggestion(it.diagnosis.label)
+                        resultViewModel.getSuggestion(diagnosisText)
 
                         // Save to history
                         val dateDetected = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                         val detectionHistory = DetectionHistory(
                             imageUri = file.absolutePath,
-                            diagnosis = it.diagnosis.label,
-                            explanation = it.diagnosis.explanation,
-                            suggestion = it.diagnosis.suggestion,
+                            diagnosis = diagnosisText,
+                            explanation = explanationText,
+                            suggestion = suggestionText,
                             dateDetected = dateDetected
                         )
                         saveToHistory(detectionHistory)
@@ -114,15 +130,11 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-
     private fun saveToHistory(detectionHistory: DetectionHistory) {
         val sharedPrefHelper = SharedPrefHelper(this)
 
-        // Get current history or empty list if not found
         val currentHistory = sharedPrefHelper.getHistory().toMutableList()
         currentHistory.add(detectionHistory)
-
-        // Save updated history list
         sharedPrefHelper.saveHistory(currentHistory)
     }
 

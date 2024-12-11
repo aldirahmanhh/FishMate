@@ -59,19 +59,75 @@ class ResultViewModel : ViewModel() {
         barChart?.invalidate()
     }
 
-
     fun getSuggestion(diagnosis: String) {
-        val prompt = "Berikan saran tindakan yang harus dilakukan jika ikan saya mengalami penyakit $diagnosis dalam 1 paragraf dengan penjelasan yang jelas dan terperinci."
+        val prompt = """
+            Berikan saran untuk penyakit $diagnosis dengan struktur sebagai berikut:
+            1. Tindakan yang segera harus dilakukan: [Jelaskan tindakan yang harus segera dilakukan secara rinci].
+            2. Saran Pencegahan: [Berikan rekomendasi pencegahan agar penyakit ini tidak terjadi lagi].
+            3. Informasi lainnya: [Sertakan informasi tambahan yang relevan dengan penyakit ini].
+        """.trimIndent()
 
         viewModelScope.launch {
             try {
-                Log.d(this.toString(), "Generating suggestion for diagnosis: $diagnosis")
+                Log.d("ResultViewModel", "Sending prompt to AI: $prompt")
                 val generateContent = generativeModel.generateContent(prompt)
-                _suggestion.value = generateContent.text
+                var aiSuggestion = generateContent.text ?: "" // Pastikan tidak null
+
+                // Bersihkan format bold
+                aiSuggestion = cleanBoldFormatting(aiSuggestion)
+
+                Log.d("ResultViewModel", "AI Suggestion: $aiSuggestion")
+
+                // Extract categorized suggestions
+                val formattedSuggestion = formatCategorizedSuggestion(aiSuggestion)
+                Log.d("ResultViewModel", "Formatted Suggestion: $formattedSuggestion")
+
+                // Update suggestion LiveData
+                _suggestion.value = formattedSuggestion
+
             } catch (e: Exception) {
-                Log.e("ResultViewModel", "Error generating suggestion: ${e.message}")
-                _suggestion.value = "Failed to fetch suggestion"
+                Log.e("ResultViewModel", "Error generating suggestion: ${e.message}", e)
+                _suggestion.value = "Gagal mengambil saran"
             }
         }
+    }
+
+    // Fungsi untuk membersihkan format bold
+    private fun cleanBoldFormatting(text: String): String {
+        return text.replace(Regex("\\*\\*"), "")
+    }
+
+    // Extract categorized suggestions from the AI response
+    private fun formatCategorizedSuggestion(suggestionText: String): String {
+        val tindakanRegex = Regex("1\\. Tindakan yang Segera Harus Dilakukan:(.*?)(?=2\\. Saran Pencegahan:|$)", RegexOption.DOT_MATCHES_ALL)
+        val pencegahanRegex = Regex("2\\. Saran Pencegahan:(.*?)(?=3\\. Informasi Lainnya:|$)", RegexOption.DOT_MATCHES_ALL)
+        val informasiRegex = Regex("3\\. Informasi Lainnya:(.*)", RegexOption.DOT_MATCHES_ALL)
+
+        val tindakan = tindakanRegex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
+        val pencegahan = pencegahanRegex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
+        val informasi = informasiRegex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
+
+        return """
+        1. Tindakan yang segera harus dilakukan:
+        $tindakan
+
+        2. Saran Pencegahan:
+        $pencegahan
+
+        3. Informasi lainnya:
+        $informasi
+    """.trimIndent()
+    }
+
+
+    // Fungsi tambahan untuk memisahkan setiap poin
+    fun extractPoint(suggestionText: String, pointNumber: Int): String {
+        val regex = when (pointNumber) {
+            1 -> Regex("\\*\\*1\\. Tindakan yang Segera Harus Dilakukan:\\*(.*?)\\*\\*2\\. Saran Pencegahan:\\*", RegexOption.DOT_MATCHES_ALL)
+            2 -> Regex("\\*\\*2\\. Saran Pencegahan:\\*(.*?)\\*\\*3\\. Informasi Lainnya:\\*", RegexOption.DOT_MATCHES_ALL)
+            3 -> Regex("\\*\\*3\\. Informasi Lainnya:\\*(.*)", RegexOption.DOT_MATCHES_ALL)
+            else -> return "Tidak valid"
+        }
+        return regex.find(suggestionText)?.groupValues?.get(1)?.trim() ?: "Tidak tersedia"
     }
 }

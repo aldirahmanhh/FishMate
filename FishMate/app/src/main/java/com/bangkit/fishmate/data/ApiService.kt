@@ -46,6 +46,8 @@ interface ApiService {
     @POST("auth/changePassword")
     fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Call<ChangePasswordResponse>
 
+
+
     //Model ML
     @Multipart
     @POST("upload")
