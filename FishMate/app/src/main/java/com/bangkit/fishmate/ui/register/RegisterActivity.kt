@@ -28,22 +28,22 @@ class RegisterActivity : AppCompatActivity() {
         binding.loading.visibility = View.GONE
 
         binding.register.setOnClickListener {
-            val username = binding.username.text.toString().trim()
-            val email = binding.email.text.toString().trim()
-            val password = binding.password.text.toString().trim()
+            val username = binding.usernameLayout.text.toString().trim()
+            val email = binding.emailLayout.text.toString().trim()
+            val password = binding.passwordLayout.text.toString().trim()
 
             if (username.isEmpty()) {
-                binding.username.error = "Username is required"
+                binding.usernameLayout.error = "Username is required"
                 return@setOnClickListener
             }
 
             if (email.isEmpty()) {
-                binding.email.error = "Email is required"
+                binding.emailLayout.error = "Email is required"
                 return@setOnClickListener
             }
 
             if (password.isEmpty()) {
-                binding.password.error = "Password is required"
+                binding.passwordLayout.error = "Password is required"
                 return@setOnClickListener
             }
 

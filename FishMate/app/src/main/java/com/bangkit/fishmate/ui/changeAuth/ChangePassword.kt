@@ -43,6 +43,11 @@ class ChangePassword : AppCompatActivity() {
             val request = ChangePasswordRequest(email, currentPassword, newPassword, confirmPassword)
             updatePassword(request)
         }
+
+        // Handle Back button click
+        binding.back.setOnClickListener {
+            finish() // Close the activity when the back button is clicked
+        }
     }
 
     private fun updatePassword(request: ChangePasswordRequest) {

@@ -15,6 +15,8 @@ import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.ActivityLoginBinding
 import com.bangkit.fishmate.ui.changeAuth.ChangePassword
 import com.bangkit.fishmate.ui.register.RegisterActivity
+import com.bangkit.fishmate.ui.validation.EmailValid
+import com.bangkit.fishmate.ui.validation.PassValid
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,8 +50,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding.login.setOnClickListener {
             binding.loading.visibility = View.VISIBLE
-            val usernameEditText = findViewById<TextInputEditText>(R.id.username)
-            val passwordEditText = findViewById<TextInputEditText>(R.id.password)
+            val usernameEditText = findViewById<EmailValid>(R.id.usernameLayout)
+            val passwordEditText = findViewById<PassValid>(R.id.passwordLayout)
             val email = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
 
