@@ -6,12 +6,17 @@ import com.bangkit.fishmate.data.Response.ChangePasswordRequest
 import com.bangkit.fishmate.data.Response.ChangePasswordResponse
 import com.bangkit.fishmate.data.Response.DiagnosisResponse
 import com.bangkit.fishmate.data.Response.FishBannerResponse
+import com.bangkit.fishmate.data.Response.ForgotPasswordRequest
+import com.bangkit.fishmate.data.Response.ForgotPasswordResponse
 import com.bangkit.fishmate.data.Response.LoginRequest
 import com.bangkit.fishmate.data.Response.LoginResponse
 import com.bangkit.fishmate.data.Response.NewsResponse
 import com.bangkit.fishmate.data.Response.ProductResponse
 import com.bangkit.fishmate.data.Response.RegisterRequest
 import com.bangkit.fishmate.data.Response.RegisterResponse
+import com.bangkit.fishmate.data.Response.ResetPasswordRequest
+import com.bangkit.fishmate.data.Response.ResetPasswordResponse
+import com.bangkit.fishmate.ui.changeAuth.ForgotPassword
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -50,7 +55,15 @@ interface ApiService {
         @Body request: ChangePasswordRequest
     ): Call<ChangePasswordResponse>
 
+    @POST("auth/forgotPassword")
+    fun forgotPassword(
+        @Body request: ForgotPasswordRequest
+    ): Call<ForgotPasswordResponse>
 
+    @POST("auth/resetPassword")
+    fun resetPassword(
+        @Body request: ResetPasswordRequest
+    ): Call<ResetPasswordResponse>
 
     //Model ML
     @Multipart

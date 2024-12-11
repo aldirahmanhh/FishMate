@@ -85,4 +85,12 @@
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
+
+    <string name="hint_token">Masukkan token</string>
+    <string name="token_required">Token tidak boleh kosong</string>
+    <string name="token_invalid">Token hanya boleh berisi huruf dan angka</string>
+    <string name="token_length_error">Token harus terdiri dari 6 karakter</string>
+    <string name="ubah_kata_sandi">Ubah Kata Sandi</string>
+    <string name="kirim_token">Kirim Token</string>
+
 </resources>

@@ -38,6 +38,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".ui.changeAuth.ForgotPassword"
+            android:exported="false" />
+
         <activity
             android:name=".ui.capture.CaptureActivity"
             android:exported="false" />

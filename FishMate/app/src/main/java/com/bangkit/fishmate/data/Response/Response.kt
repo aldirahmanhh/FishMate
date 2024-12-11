@@ -77,6 +77,18 @@ data class ForgotPasswordResponse(
     val message: String
 )
 
+data class ResetPasswordRequest(
+    val email: String,
+    val token: String,
+    val newPassword: String,
+    val confirmPassword: String
+)
+
+data class ResetPasswordResponse(
+    val error: Boolean,
+    val message: String
+)
+
 data class ApiResponse(
     val status: String,
     val message: String,

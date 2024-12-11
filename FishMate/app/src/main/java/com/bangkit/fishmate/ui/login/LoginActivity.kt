@@ -14,6 +14,7 @@ import com.bangkit.fishmate.data.Response.LoginResponse
 import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.ActivityLoginBinding
 import com.bangkit.fishmate.ui.changeAuth.ChangePassword
+import com.bangkit.fishmate.ui.changeAuth.ForgotPassword
 import com.bangkit.fishmate.ui.register.RegisterActivity
 import com.bangkit.fishmate.ui.validation.EmailValid
 import com.bangkit.fishmate.ui.validation.PassValid
@@ -45,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.forgotPassword.setOnClickListener {
-            startActivity(Intent(this, ChangePassword::class.java))
+            startActivity(Intent(this, ForgotPassword::class.java))
         }
 
         binding.login.setOnClickListener {
