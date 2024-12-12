@@ -56,7 +56,7 @@ const findToken = async (email, token) => {
     const doc = await db.collection('resetToken').doc(email).get();
     if (!doc.exists) return null;
     const data = doc.data();
-    if (data.expiresIn <= Date.now()) {
+    if (data.token !== token || data.expiresIn <= Date.now()) {
         return null;
     }
     return data;
