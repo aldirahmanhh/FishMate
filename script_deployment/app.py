@@ -80,7 +80,7 @@ def preprocess_image(file):
 
     # Transform image same as for training
     data = np.asarray(pillow_img)
-    data = data/255.0
+    # data = data/255.0
     data = np.expand_dims(data, axis=0)  
     image_resize = tf.image.resize(data, [224, 224])
     return image_resize
@@ -109,7 +109,7 @@ def upload_and_classify():
             image_data = preprocess_image(file)
 
             # Perform prediction
-            predictions = model(image_data)
+            predictions = model.predict(image_data)
             #predictions = model.predict(image)
             predicted_class = np.argmax(predictions[0]) # Assuming softmax output
             confidence = float(np.max(predictions[0]))
