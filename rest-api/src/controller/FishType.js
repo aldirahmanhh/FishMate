@@ -19,14 +19,14 @@ const getFish = async (req, res) => {
 
 const fishById = async (req, res) => {
     try {
-        const {fishId} = req.params;
+        const { fishId } = req.params;
         const fish = await fishTypeModel.getFishById(fishId);
 
-        if(!fish) {
+        if (!fish) {
             res.status(404).json({
                 success: false,
                 message: 'Ikan tidak ditemukan'
-            }) 
+            })
         }
 
         res.status(200).json({
