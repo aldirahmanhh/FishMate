@@ -11,7 +11,7 @@ import com.bangkit.fishmate.ui.shop.WebViewActivity
 import com.bumptech.glide.Glide
 
 class ProductAdapter(
-    private val context: Context,  // Menambahkan Context untuk Intent
+    private val context: Context,
     private val productList: List<Product>
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
@@ -29,26 +29,21 @@ class ProductAdapter(
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
-            // Set title, description, and price
             binding.productTitle.text = product.product_title
             binding.productDescription.text = product.product_description
             binding.productPrice.text = product.offer.price
 
-            // Set product rating
             binding.productRating.rating = product.product_rating.toFloat()
 
-            // Load the first image from the list of product photos using Glide
             if (product.product_photos.isNotEmpty()) {
                 Glide.with(binding.root.context)
                     .load(product.product_photos.first())
                     .into(binding.productImage)
             }
 
-            // Handle product item click
             binding.root.setOnClickListener {
-                // Mengirim URL ke WebViewActivity
                 val intent = Intent(context, WebViewActivity::class.java)
-                intent.putExtra("PRODUCT_URL", product.product_page_url)  // Kirim URL produk
+                intent.putExtra("PRODUCT_URL", product.product_page_url)
                 context.startActivity(intent)
             }
         }

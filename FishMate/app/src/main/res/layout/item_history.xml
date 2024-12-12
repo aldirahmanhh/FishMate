@@ -1,33 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- item_history.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="8dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/historyImageView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:contentDescription="@string/image"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/fishmate_logo" />
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/fishmate_logo" />
 
     <TextView
-        android:id="@+id/historyDiagnosisTextView"
+        android:id="@+id/diagnosisTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/diagnosis"
-        android:textSize="16sp"
         android:textStyle="bold"
-        android:paddingTop="8dp" />
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
 
     <TextView
-        android:id="@+id/historyDateTextView"
+        android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tanggal"
+        android:text="Date"
         android:textSize="14sp"
-        android:paddingTop="4dp" />
+        android:layout_marginTop="4dp" />
 </LinearLayout>

@@ -17,6 +17,10 @@ import com.bangkit.fishmate.R
 import com.bangkit.fishmate.data.ModelConfig
 import com.bangkit.fishmate.data.Response.DetectionHistory
 import com.bangkit.fishmate.data.SharedPrefHelper
+import com.bangkit.fishmate.repository.HistoryRepository
+import com.bangkit.fishmate.ui.HistoryActivity
+import com.bangkit.fishmate.ui.capture.CaptureActivity
+import com.bangkit.fishmate.ui.home.HomeFragment
 import com.bangkit.fishmate.ui.sugesstion.SugesstionActivity
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -35,7 +39,6 @@ class ResultActivity : AppCompatActivity() {
     private lateinit var barChart: com.github.mikephil.charting.charts.BarChart
 
     private var imageUri: String? = null
-
     private var diagnosisText: String? = null
     private var isUploadCompleted = false
 
@@ -52,6 +55,7 @@ class ResultActivity : AppCompatActivity() {
         diagnosisTextView = findViewById(R.id.diagnosisTextView)
         explanationTextView = findViewById(R.id.explanationTextView)
         barChart = findViewById(R.id.barChart) // Initialize BarChart
+
 
         imageUri = intent.getStringExtra("image_uri")
         Log.d("ResultActivity", "Received image URI: $imageUri")
@@ -71,7 +75,6 @@ class ResultActivity : AppCompatActivity() {
             Toast.makeText(this, "No image URI received", Toast.LENGTH_SHORT).show()
         }
         suggestionButton()
-
     }
 
     private fun suggestionButton() {
@@ -150,7 +153,7 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun saveToHistory(diagnosisText: String, explanationText: String, suggestionText: String) {
-        val sharedPrefHelper = SharedPrefHelper(this)
+        val historyRepository = HistoryRepository(this)
 
         val dateDetected = SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss",
@@ -160,15 +163,20 @@ class ResultActivity : AppCompatActivity() {
         val detectionHistory = DetectionHistory(
             imageUri = imageUri ?: "",
             diagnosis = diagnosisText,
-            explanation = explanationText,
-            suggestion = suggestionText,
             dateDetected = dateDetected
         )
+        Log.d("ResultActivity", "Detection History: $detectionHistory")
 
-        val currentHistory = sharedPrefHelper.getHistory().toMutableList()
+        val currentHistory = historyRepository.getHistory().toMutableList()
         currentHistory.add(detectionHistory)
-        sharedPrefHelper.saveHistory(currentHistory)
+
+        // Menyimpan kembali seluruh riwayat
+        historyRepository.saveHistory(currentHistory)
+
+        Log.d("ResultActivity", "Saved to history: ${detectionHistory.imageUri}")
     }
+
+
 
     private fun getFileFromUri(uri: Uri): File {
         val inputStream: InputStream? = contentResolver.openInputStream(uri)
@@ -181,3 +189,4 @@ class ResultActivity : AppCompatActivity() {
         return tempFile
     }
 }
+

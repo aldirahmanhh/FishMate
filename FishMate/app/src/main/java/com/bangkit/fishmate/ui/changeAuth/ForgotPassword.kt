@@ -33,7 +33,6 @@ class ForgotPassword : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
-        // Initialize views
         emailTitle = findViewById(R.id.emailTitle)
         tokenTitle = findViewById(R.id.tokenTitle)
         newPasswordTitle = findViewById(R.id.newPasswordTitle)
@@ -46,7 +45,6 @@ class ForgotPassword : AppCompatActivity() {
         buttonAction = findViewById(R.id.button_action)
         progressBar = findViewById(R.id.loading)
 
-        // Button click listener
         buttonAction.setOnClickListener {
             if (isResetMode) {
                 progressBar.visibility = View.VISIBLE
@@ -68,7 +66,6 @@ class ForgotPassword : AppCompatActivity() {
             return
         }
 
-        // Show progress bar
         progressBar.visibility = View.VISIBLE
 
         val request = ForgotPasswordRequest(emailInput)
@@ -140,7 +137,7 @@ class ForgotPassword : AppCompatActivity() {
                         response.body()?.message ?: "Password Reset Success",
                         Toast.LENGTH_SHORT
                     ).show()
-                    finish() // Close activity after success
+                    finish()
                 } else {
                     Toast.makeText(
                         this@ForgotPassword,

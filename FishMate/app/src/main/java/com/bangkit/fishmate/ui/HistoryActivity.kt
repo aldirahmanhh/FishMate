@@ -1,63 +1,88 @@
 package com.bangkit.fishmate.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bangkit.fishmate.R
 import com.bangkit.fishmate.adapter.HistoryAdapter
-import com.bangkit.fishmate.data.Response.DetectionHistory
-import com.bangkit.fishmate.data.SharedPrefHelper
 import com.bangkit.fishmate.databinding.ActivityHistoryBinding
+import android.net.Uri
+import com.bangkit.fishmate.repository.HistoryRepository
 
 class HistoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryBinding
-    private lateinit var sharedPrefHelper: SharedPrefHelper
-    private val historyAdapter: HistoryAdapter by lazy {
-        HistoryAdapter(getHistoryList())
-    }
+    private lateinit var historyRepository: HistoryRepository
+    private lateinit var historyAdapter: HistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.loading.visibility = View.VISIBLE
-        // Initialize SharedPreferences
-        sharedPrefHelper = SharedPrefHelper(this)
+        // Initialize the repository
+        historyRepository = HistoryRepository(this)
 
-        // Setup RecyclerView
+        // Get history data from the repository
+        val historyList = historyRepository.getHistory()
+
+        historyAdapter = HistoryAdapter(historyList)
         binding.rvHistory.layoutManager = LinearLayoutManager(this)
         binding.rvHistory.adapter = historyAdapter
 
-        // Setup Clear History Button
         binding.clearButton.setOnClickListener {
+            binding.loading.visibility = View.VISIBLE
             clearHistory()
+            binding.loading.visibility = View.GONE
         }
 
         binding.backButton.setOnClickListener {
             finish()
         }
-    }
 
-    private fun getHistoryList(): List<DetectionHistory> {
         binding.loading.visibility = View.GONE
-        return sharedPrefHelper.getHistory()
     }
 
+    // Clear history and update RecyclerView
     private fun clearHistory() {
-        sharedPrefHelper.clearHistory()  // Clear history from SharedPreferences
-        Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show()
+        val currentHistory = historyRepository.getHistory()
 
-        // After clearing the history, update the adapter with an empty list
-        historyAdapter.updateHistoryList(emptyList())
+        if (currentHistory.size >= 20) {
+            showClearHistoryDialog {
+                historyRepository.clearHistory()
+                Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show()
 
-        // Notify RecyclerView to update
-        historyAdapter.notifyDataSetChanged()
+                // Update the adapter after clearing
+                historyAdapter.updateHistoryList(emptyList())
+                historyAdapter.notifyDataSetChanged()
+
+                binding.loading.visibility = View.GONE
+            }
+        } else {
+            historyRepository.clearHistory()
+            Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show()
+
+            // Update the adapter after clearing
+            historyAdapter.updateHistoryList(emptyList())
+            historyAdapter.notifyDataSetChanged()
+
+            binding.loading.visibility = View.GONE
+        }
     }
 
+    private fun showClearHistoryDialog(onConfirm: () -> Unit) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Riwayat sudah mencapai batas 20. Apakah Anda ingin menghapus riwayat pertama?")
+            .setCancelable(false)
+            .setPositiveButton("Ya") { dialog, id ->
+                onConfirm()
+            }
+            .setNegativeButton("Tidak") { dialog, id ->
+                dialog.dismiss()
+            }
+        val alert = builder.create()
+        alert.show()
+    }
 }

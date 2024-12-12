@@ -22,14 +22,12 @@ class ChangePassword : AppCompatActivity() {
         binding = ActivityChangePasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Handle Save Password button click
         binding.buttonChangePassword.setOnClickListener {
             val email = binding.email.text.toString().trim()
             val currentPassword = binding.password.text.toString().trim()
             val newPassword = binding.newPassword.text.toString().trim()
             val confirmPassword = binding.confirmPassword.text.toString().trim()
 
-            // Input validation
             if (email.isEmpty() || currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
                 showToast("All fields are required")
                 return@setOnClickListener
@@ -44,29 +42,26 @@ class ChangePassword : AppCompatActivity() {
             updatePassword(request)
         }
 
-        // Handle Back button click
         binding.back.setOnClickListener {
-            finish() // Close the activity when the back button is clicked
+            finish()
         }
     }
 
     private fun updatePassword(request: ChangePasswordRequest) {
-        // Show loading indicator
+
         binding.loading.visibility = View.VISIBLE
 
-        // Get the token from SharedPreferences (or wherever it's stored)
-        val token = "Bearer ${SharedPrefHelper(this).getToken()}" // Assuming you store the token with "Bearer " prefix
+        val token = "Bearer ${SharedPrefHelper(this).getToken()}"
 
-        // Call API to update password
         AuthConfig.api.changePassword(token, request).enqueue(object : Callback<ChangePasswordResponse> {
             override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
-                binding.loading.visibility = View.GONE // Hide loading indicator
+                binding.loading.visibility = View.GONE
 
                 if (response.isSuccessful) {
                     val changePasswordResponse = response.body()
                     if (changePasswordResponse != null && !changePasswordResponse.error) {
                         showToast("Password successfully updated")
-                        finish() // Close the activity after successful password update
+                        finish()
                     } else {
                         showToast(changePasswordResponse?.message ?: "Failed to update password")
                     }
@@ -76,7 +71,7 @@ class ChangePassword : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ChangePasswordResponse>, t: Throwable) {
-                binding.loading.visibility = View.GONE // Hide loading indicator
+                binding.loading.visibility = View.GONE
                 showToast("Request failed: ${t.message}")
             }
         })

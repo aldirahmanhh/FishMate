@@ -146,7 +146,5 @@ data class Diagnosis(
 data class DetectionHistory(
     val imageUri: String,
     val diagnosis: String,
-    val explanation: String,
-    val suggestion: String,
     val dateDetected: String
 )

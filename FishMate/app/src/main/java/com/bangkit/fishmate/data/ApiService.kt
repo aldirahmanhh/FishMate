@@ -1,7 +1,6 @@
 package com.bangkit.fishmate.data
 
-import com.bangkit.fishmate.data.Response.ApiResponse
-import com.bangkit.fishmate.data.Response.BannerData
+
 import com.bangkit.fishmate.data.Response.ChangePasswordRequest
 import com.bangkit.fishmate.data.Response.ChangePasswordResponse
 import com.bangkit.fishmate.data.Response.DiagnosisResponse
@@ -16,7 +15,6 @@ import com.bangkit.fishmate.data.Response.RegisterRequest
 import com.bangkit.fishmate.data.Response.RegisterResponse
 import com.bangkit.fishmate.data.Response.ResetPasswordRequest
 import com.bangkit.fishmate.data.Response.ResetPasswordResponse
-import com.bangkit.fishmate.ui.changeAuth.ForgotPassword
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -31,7 +29,6 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    // Endpoint untuk mencari berita berdasarkan query
     @GET("v2/everything")
     fun getNews(
         @Query("q") query: String,
@@ -40,15 +37,12 @@ interface ApiService {
         @Query("pageSize") pageSize: Int = 5
     ): Call<NewsResponse>
 
-    //Login
     @POST("auth/login")
     fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 
-    //Register
     @POST("auth/register")
     fun register(@Body registerRequest: RegisterRequest): Call<RegisterResponse>
 
-    //Change Password
     @POST("auth/changePassword")
     fun changePassword(
         @Header("Authorization") token: String,
@@ -65,14 +59,12 @@ interface ApiService {
         @Body request: ResetPasswordRequest
     ): Call<ResetPasswordResponse>
 
-    //Model ML
     @Multipart
     @POST("upload")
     suspend fun uploadImage(
         @Part file: MultipartBody.Part
     ): Response<DiagnosisResponse>
 
-    //Product
     @GET("search-v2")
     fun getProducts(
         @Query("q") query: String = "fish medication",

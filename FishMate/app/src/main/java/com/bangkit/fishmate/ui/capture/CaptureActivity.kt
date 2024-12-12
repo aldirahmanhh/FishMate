@@ -31,8 +31,8 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var cancelButton: FloatingActionButton
     private lateinit var previewImageView: ImageView
 
-    private lateinit var imageUri: Uri // To store image URI
-    private lateinit var photoFile: File // To store the photo file
+    private lateinit var imageUri: Uri
+    private lateinit var photoFile: File
 
     private val GALLERY_REQUEST = 2
     private val CAMERA_REQUEST = 1

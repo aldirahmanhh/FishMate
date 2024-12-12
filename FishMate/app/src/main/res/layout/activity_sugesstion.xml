@@ -5,25 +5,24 @@
     android:layout_marginBottom="32dp"
     android:layout_marginStart="32dp"
     android:layout_marginEnd="32dp"
-    android:orientation="vertical"
-
-    >
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
+        <!-- Symptom Box -->
         <LinearLayout
             android:id="@+id/symptomBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="16dp"
             android:background="@drawable/button_background"
             android:orientation="vertical"
             android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/tv_symptom"
@@ -31,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/gejala"
                 android:textColor="@color/text_color"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -39,20 +38,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/isi_gejala"
-                android:textColor="@color/text_color" />
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
         </LinearLayout>
 
+        <!-- Action Box -->
         <LinearLayout
             android:id="@+id/tindakanBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="16dp"
             android:background="@drawable/button_background"
             android:orientation="vertical"
             android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/symptomBox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/symptomBox">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/tv_action"
@@ -60,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tindakan"
                 android:textColor="@color/text_color"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -68,21 +69,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/isi_tindakan"
-                android:textColor="@color/text_color" />
-
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
         </LinearLayout>
 
+        <!-- Prevention Box -->
         <LinearLayout
             android:id="@+id/pencegahanBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="16dp"
             android:background="@drawable/button_background"
             android:orientation="vertical"
             android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tindakanBox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tindakanBox">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/tv_prevention"
@@ -90,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/pencegahan"
                 android:textColor="@color/text_color"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -98,11 +100,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/isi_pencegahan"
-                android:textColor="@color/text_color" />
-
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
         </LinearLayout>
+
+        <!-- Back Button at the bottom -->
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="14sp"
+            android:text="@string/back"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/button_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pencegahanBox"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </ScrollView>
-
-

@@ -12,10 +12,8 @@ class ProductConfig {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    // Fungsi untuk mengambil data produk dengan pagination
     suspend fun fetchProducts(page: Int): List<Product> {
         return withContext(Dispatchers.IO) {
-            // Dynamically update the URL with the current page
             val url = "https://real-time-product-search.p.rapidapi.com/search-v2?q=fish%20medication&country=us&language=en&page=$page&limit=10&sort_by=BEST_MATCH&product_condition=ANY"
 
             val request = Request.Builder()
@@ -25,14 +23,13 @@ class ProductConfig {
                 .addHeader("x-rapidapi-host", "real-time-product-search.p.rapidapi.com")
                 .build()
 
-            // Menjalankan request dan mendapatkan response
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
                 val productResponse = gson.fromJson(responseBody, ProductResponse::class.java)
-                return@withContext productResponse.data.products ?: emptyList() // Return an empty list if null
+                return@withContext productResponse.data.products
             } else {
-                return@withContext emptyList() // Return an empty list if the request fails
+                return@withContext emptyList()
             }
         }
     }
