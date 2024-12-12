@@ -10,11 +10,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Observer
 import com.bangkit.fishmate.R
 import com.bangkit.fishmate.ui.result.ResultActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,6 +33,8 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var analyzeButton: Button
     private lateinit var cancelButton: FloatingActionButton
     private lateinit var previewImageView: ImageView
+
+    private val captureViewModel: CaptureViewModel by viewModels()
 
     private lateinit var imageUri: Uri
     private lateinit var photoFile: File
@@ -55,9 +60,31 @@ class CaptureActivity : AppCompatActivity() {
             requestStoragePermission()
         }
 
+        captureViewModel.isFirstStart.observe(this) { isFirstStart ->
+            if (isFirstStart) {
+                showStaticAlertDialog()
+                captureViewModel.setFirstStartShown()
+            }
+        }
+
         cancelButton.setOnClickListener {
             finish()
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
+    }
+
+    private fun showStaticAlertDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_image_alert, null)
+
+        val alertDialog = android.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        alertDialog.show()
     }
 
     private fun setupUI() {
@@ -177,4 +204,6 @@ class CaptureActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

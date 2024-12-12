@@ -26,9 +26,11 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.sugesstion.SugesstionActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".ui.HistoryActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <provider
@@ -42,27 +44,34 @@
         </provider>
 
         <activity android:name=".ui.changeAuth.ForgotPassword"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".ui.capture.CaptureActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.shop.WebViewActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.news.NewsPageActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".ui.result.ResultActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.register.RegisterActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,9 +81,11 @@
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".ui.changeAuth.ChangePassword"
+            android:screenOrientation="portrait"
             android:exported="true" />
     </application>
 

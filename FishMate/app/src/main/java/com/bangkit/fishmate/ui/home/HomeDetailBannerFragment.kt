@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,15 +19,15 @@ class HomeDetailBannerFragment : Fragment() {
     private lateinit var viewModel: HomeDetailBannerViewModel
     private var fishId: Int? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Get the fishId passed from the previous fragment
+
         fishId = arguments?.getInt("fishId", -1)
         Log.d("HomeDetailFragment", "Received Fish ID: $fishId")
 
         if (fishId != -1) {
-            // Initialize ViewModel using the AndroidViewModel constructor
             viewModel = ViewModelProvider(this).get(HomeDetailBannerViewModel::class.java)
             viewModel.fetchFishDetail(fishId)
         } else {
@@ -39,10 +40,12 @@ class HomeDetailBannerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeDetailBannerBinding.inflate(inflater, container, false)
+        val progressBar = binding.progressBar
+
+        progressBar.visibility = View.VISIBLE
 
         setupObservers()
 
-        // Floating action button click handler
         binding.fabBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -51,8 +54,10 @@ class HomeDetailBannerFragment : Fragment() {
     }
 
     private fun setupObservers() {
+        val progressBar = binding.progressBar
         viewModel.fishData.observe(viewLifecycleOwner) { fishData ->
             if (fishData != null) {
+                progressBar.visibility = View.GONE
                 binding.titleFish.text = fishData.nama ?: "No Title"
                 binding.descFish.text = fishData.deskripsi ?: "No Description"
 
@@ -62,6 +67,7 @@ class HomeDetailBannerFragment : Fragment() {
                         .into(binding.fishBannerDetail)
                 }
             } else {
+                progressBar.visibility = View.VISIBLE
                 Toast.makeText(requireContext(), "No data found", Toast.LENGTH_SHORT).show()
             }
         }
@@ -77,4 +83,5 @@ class HomeDetailBannerFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

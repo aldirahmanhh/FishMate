@@ -45,15 +45,7 @@ class HomeFragment : Fragment() {
             openWebView(url)
         }
 
-        binding.buttonFishCxHome.setOnClickListener {
-            val intent = Intent(requireContext(), CaptureActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.buttonHistoryHome.setOnClickListener {
-            val intent = Intent(requireContext(), HistoryActivity::class.java)
-            startActivity(intent)
-        }
+        setupButtonClickListeners()
 
         binding.rvNewsRecomendation.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvNewsRecomendation.adapter = newsAdapter
@@ -75,6 +67,22 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun setupButtonClickListeners() {
+        binding.buttonFishCxHome.setOnClickListener {
+            navigateToActivityWithTransition(CaptureActivity::class.java)
+        }
+
+        binding.buttonHistoryHome.setOnClickListener {
+            navigateToActivityWithTransition(HistoryActivity::class.java)
+        }
+    }
+
+    private fun navigateToActivityWithTransition(activityClass: Class<*>) {
+        val intent = Intent(requireContext(), activityClass)
+        startActivity(intent)
+
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
 
 
     fun setupViewPager() {

@@ -168,4 +168,5 @@
     <color name="text_color">#FFFFFF</color>
     <color name="thumbTint">#33D4EE</color>
     <color name="trackTint">#FFFFFF</color>
+    <color name="barchart">#000000</color>
 </resources>

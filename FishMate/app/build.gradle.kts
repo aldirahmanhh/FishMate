@@ -75,6 +75,8 @@ dependencies {
     implementation ("androidx.datastore:datastore-core:1.1.1")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation ("com.google.android.material:material:1.11.0")
+
 
 
     implementation(libs.androidx.core.ktx)

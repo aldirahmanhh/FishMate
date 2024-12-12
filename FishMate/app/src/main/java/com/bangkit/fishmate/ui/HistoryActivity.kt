@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.fishmate.adapter.HistoryAdapter
 import com.bangkit.fishmate.databinding.ActivityHistoryBinding
 import android.net.Uri
+import com.bangkit.fishmate.R
 import com.bangkit.fishmate.repository.HistoryRepository
 
 class HistoryActivity : AppCompatActivity() {
@@ -40,6 +41,7 @@ class HistoryActivity : AppCompatActivity() {
 
         binding.backButton.setOnClickListener {
             finish()
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
 
         binding.loading.visibility = View.GONE

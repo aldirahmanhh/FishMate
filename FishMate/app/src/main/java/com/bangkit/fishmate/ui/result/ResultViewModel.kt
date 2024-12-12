@@ -1,10 +1,12 @@
 package com.bangkit.fishmate.ui.result
 
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bangkit.fishmate.R
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -59,19 +61,32 @@ class ResultViewModel : ViewModel() {
         }
 
         val dataSet = BarDataSet(entries, "Jenis Penyakit")
+
+        val borderColor = ContextCompat.getColor(barChart!!.context, R.color.barchart)
+        val textColor = ContextCompat.getColor(barChart!!.context, R.color.barchart)
+
+        dataSet.setBarBorderColor(borderColor)
+        dataSet.barBorderWidth = 2f
+
         val barData = BarData(dataSet)
 
         barChart?.data = barData
         barChart?.description?.isEnabled = false
         barChart?.xAxis?.valueFormatter = IndexAxisValueFormatter(labels)
         barChart?.xAxis?.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+        barChart?.xAxis?.textColor = textColor
+
+        barChart?.axisLeft?.textColor = textColor
+        barChart?.axisRight?.textColor = textColor
+
+        barChart?.legend?.textColor = textColor
         barChart?.invalidate()
     }
 
 
     fun getSuggestionAction(diagnosis: String) {
         val prompt = """
-           Tindakan yang segera harus dilakukan jika ikan mengalami $diagnosis, buat dalam 1 paragraf
+           Tindakan yang segera harus dilakukan jika ikan mengalami $diagnosis, buat dalam 1 paragraf 100 huruf
         """.trimIndent()
 
         viewModelScope.launch {
@@ -92,7 +107,7 @@ class ResultViewModel : ViewModel() {
 
     fun getSuggestionPrevention(diagnosis: String) {
         val prompt = """
-          Pencegahan supaya ikan tidak mengalami $diagnosis, buat dalam 1 paragraf
+          Pencegahan supaya ikan tidak mengalami $diagnosis, buat dalam 1 paragraf 100 huruf
         """.trimIndent()
 
         viewModelScope.launch {
@@ -113,7 +128,7 @@ class ResultViewModel : ViewModel() {
 
     fun getSuggestionSymptom(diagnosis: String) {
         val prompt = """
-          Berikan ciri-ciri penyakit $diagnosis, buat dalam 1 paragraf
+          Berikan ciri-ciri penyakit $diagnosis, buat dalam 1 paragraf 100 huruf
         """.trimIndent()
 
         viewModelScope.launch {

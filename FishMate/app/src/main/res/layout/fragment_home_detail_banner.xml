@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_margin="32dp"
-        android:contentDescription="Fish Banner"
+        android:contentDescription="@string/fish_banner"
         app:layout_constraintTop_toBottomOf="@id/fab_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,9 +40,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:textSize="24sp"
+        android:textSize="34sp"
         android:textStyle="bold"
-        android:text="Fish Name"
+        android:text="@string/memuat_nama_ikan"
         android:textColor="@color/md_theme_primary"
         app:layout_constraintTop_toBottomOf="@id/fishBanner_detail"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,9 +57,20 @@
         android:layout_marginEnd="32dp"
         android:textSize="14sp"
         android:textStyle="normal"
-        android:text="Fish Description"
+        android:text="@string/memuat_deskripsi_ikan"
         android:textColor="@color/md_theme_primary"
         app:layout_constraintTop_toBottomOf="@id/title_fish"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

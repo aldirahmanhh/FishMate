@@ -26,29 +26,23 @@ class ShopFragment : Fragment() {
 
         binding.progressBar.visibility = View.VISIBLE
 
-        // RecyclerView setup
         binding.rvFishRecomendation.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter(requireContext(), productList)  // Passing context to the adapter
+        productAdapter = ProductAdapter(requireContext(), productList)
         binding.rvFishRecomendation.adapter = productAdapter
 
-        // SwipeRefresh setup
         binding.swipeRefreshLayout.setOnRefreshListener {
-            shopViewModel.fetchProducts(refresh = true) // Refresh data
+            shopViewModel.fetchProducts(refresh = true)
         }
-
-        // Get ViewModel
         shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
 
-        // Observer for product data
         shopViewModel.products.observe(viewLifecycleOwner) { products ->
             productList.clear()
             productList.addAll(products)
             productAdapter.notifyDataSetChanged()
-            binding.swipeRefreshLayout.isRefreshing = false // Stop the refresh animation
-            binding.progressBar.visibility = View.GONE // Hide the progress bar after data is ready
+            binding.swipeRefreshLayout.isRefreshing = false
+            binding.progressBar.visibility = View.GONE
         }
 
-        // Initial data fetch
         shopViewModel.fetchProducts()
 
         return binding.root
