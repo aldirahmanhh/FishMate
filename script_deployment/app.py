@@ -13,7 +13,7 @@ import time
 app = Flask(__name__)
 
 # path to json credential
-key_file = 'firestore-service-account.json'
+key_file = 'firestore-service-account-caps.json'
 
 # initial firestore credential file
 db = firestore.Client.from_service_account_json(key_file)
