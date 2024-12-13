@@ -4,7 +4,7 @@
 
 FishMate is an advanced application designed to detect various fish diseases, including fungal infections and other ailments, using image-based diagnostics. Leveraging computer vision technology, FishMate helps fish farmers, hobbyists, and aquatic specialists quickly and accurately identify potential health issues in fish, allowing for timely intervention and better fish health management.
 
-Prerequisite
+## Prerequisite
 - NodeJs v20.18.0
 
 ## Installation
