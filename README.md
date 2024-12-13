@@ -1,3 +1,4 @@
+![FishMate Logo](Banner_FishMate.png)
 # FishMate - Capstone Project Bangkit 2024 - Team C242-PS411
 
 ## What is the FishMate App? 📱
