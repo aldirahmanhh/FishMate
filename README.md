@@ -22,7 +22,12 @@ FishMate is an advanced application designed to detect various fish diseases, in
 - Cloud Computing
   - Example
 - Mobile Development
-  - Example
+  - Figma
+  - Native Kotlin
+  - WebView
+  - Android Studio
+  - Retrofit
+  - OkHttp
 
 ## Learning Path Repository
 | Path | Link |
