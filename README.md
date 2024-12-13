@@ -10,7 +10,4 @@ FishMate is an advanced application designed to detect various fish diseases, in
 | Muhammad Roihan         | M254B4KY3075          | Machine Learning |
 | Ocha Hosea Sigalingging            | M281B4KY3457          | Machine Learning         |
 | Samuel Anderson	          | M764B4KY4052          | Machine Learning  |
-| Bayu Sebastian        | C688B4KY0826          | Cloud Computing          |
-| Efrem Lucyano Syrilus Theodan	| C286B4KY1231 | Cloud Computing |
-| Aldi Rahman Hermawan | A254B4KY0330 | Mobile Development |
-| Ari Satrio Murdoko Andjalmo | A254B4KY0624 | Mobile Development |
+
