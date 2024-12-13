@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ModelConfig {
 
-    private const val BASE_URL = "https://ml-fish-173469114208.asia-southeast2.run.app"
+    private const val BASE_URL = "https://fishmate-ml-43585216176.asia-southeast2.run.app"
 
     private val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
