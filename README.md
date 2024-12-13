@@ -11,3 +11,29 @@ FishMate is an advanced application designed to detect various fish diseases, in
 | Ocha Hosea Sigalingging            | M281B4KY3457          | Machine Learning         |
 | Samuel Anderson	          | M764B4KY4052          | Machine Learning  |
 
+## Datasets
+The dataset we used comes from:
+
+1. Some of the existing datasets on Roboflow.
+2. Scraping images from Google Search.
+3. Some of the existing datasets on Kaggle.
+
+## Model Documentation
+### Data Preprocessing
+
+To run this model, follow these steps:
+
+- Download the datasets. The dataset can be found [here]().
+- Upload the dataset to your notebook environment.
+- Install the required libraries. Things about dependencies can be found [here]().
+- Pre-process the data.
+
+### Modelling
+
+- Build and compile models with TensorFlow.
+- Perform model evaluation.
+- Convert the model to `.h5` format.
+
+### Deploying
+
+- Deploying using Python and Flask
